@@ -21,7 +21,20 @@ print_step 'Atom editor'
 #
 # Install Atom packages
 #
-for atompackage in linter angular-2-typeScript-snippets atom-django atom-typescript autoclose-html color-picker django-templates editorconfig linter-pylama minimap Sublime-Style-Column-Selection
+atompackages="
+    linter
+    angular-2-typeScript-snippets
+    atom-django
+    atom-typescript
+    autoclose-html
+    color-picker
+    django-templates
+    editorconfig
+    linter-pylama
+    minimap
+    Sublime-Style-Column-Selection
+"
+for atompackage in $atompackages
 do
     apm_install $atompackage
 done

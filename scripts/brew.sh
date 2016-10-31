@@ -55,7 +55,19 @@ brew tap homebrew/science &> /dev/null
 #
 # Install Homebrew formulas
 #
-for formula in certbot gettext go mysql node postgresql pyenv pyenv-virtualenv r siege
+formulas="
+    certbot
+    gettext
+    go
+    mysql
+    node
+    postgresql
+    pyenv
+    pyenv-virtualenv
+    r
+    siege
+"
+for formula in $formulas
 do
     brew_install $formula
 done
@@ -64,7 +76,31 @@ done
 #
 # Install applications via Cask
 #
-for application in atom cakebrew calibre citrix-receiver dropbox firefox flux google-chrome keepassx kindle lego-digital-designer libreoffice ngrok owncloud pgadmin3 postman rstudio sequel-pro skype the-unarchiver transmission vlc
+applications="
+    atom
+    cakebrew
+    calibre
+    citrix-receiver
+    dropbox
+    firefox
+    flux
+    google-chrome
+    keepassx
+    kindle
+    lego-digital-designer
+    libreoffice
+    ngrok
+    owncloud
+    pgadmin3
+    postman
+    rstudio
+    sequel-pro
+    skype
+    the-unarchiver
+    transmission
+    vlc
+"
+for application in $applications
 do
     brew_cask_install $application
 done
@@ -73,7 +109,11 @@ done
 #
 # Install fonts
 #
-for font in font-open-sans font-roboto
+fonts="
+    font-open-sans
+    font-roboto
+"
+for font in $fonts
 do
     brew_cask_install $font
 done
