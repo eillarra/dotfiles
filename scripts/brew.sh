@@ -78,7 +78,6 @@ done
 #
 applications="
     atom
-    cakebrew
     calibre
     citrix-receiver
     dropbox
@@ -96,6 +95,7 @@ applications="
     rstudio
     sequel-pro
     skype
+    sourcetree
     the-unarchiver
     transmission
     vlc
