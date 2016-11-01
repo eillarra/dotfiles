@@ -102,3 +102,11 @@ print_success() {
 print_warning() {
     print_in_yellow "   [!] $1\n"
 }
+
+symlink() {
+    if [[ -f $2 ]]
+    then
+        rm $2
+    fi
+    ln -s $1 $2
+}

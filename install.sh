@@ -25,4 +25,10 @@ source "$(dirname "${BASH_SOURCE[0]}")/scripts/brew.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/atom.sh"
 
 
+#
+# Create symlinks for .dotfiles
+#
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/dotfiles.sh"
+
+
 echo

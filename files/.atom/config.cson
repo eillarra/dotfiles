@@ -1,0 +1,24 @@
+"*":
+  core:
+    disabledPackages: [
+      "whitespace"
+    ]
+    projectHome: "/Users/eillarra/Code"
+    telemetryConsent: "limited"
+  editor:
+    fontSize: 12
+    preferredLineLength: 119
+    softWrapAtPreferredLineLength: true
+    softWrapHangingIndent: 4
+    tabLength: 4
+  "exception-reporting":
+    userId: "efdfecb3-60b6-0183-acc6-044441766cbd"
+  "linter-pylama":
+    usePep257: false
+  "tree-view":
+    hideVcsIgnoredFiles: true
+".editorconfig.source":
+  editor:
+    preferredLineLength: 119
+    softWrapHangingIndent: 4
+    tabLength: 4

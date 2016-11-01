@@ -46,3 +46,10 @@ do
     apm disable $atompackage &> /dev/null
     print_info "Package \"$atompackage\" disabled"
 done
+
+
+# Create a symlink for .atom/config.cson
+file=~/.atom/config.cson
+dotfile="$(cd $(dirname "${BASH_SOURCE[0]}")/../files/; pwd)/.atom/config.cson"
+symlink $dotfile $file
+print_info "Symlink created for $file"
