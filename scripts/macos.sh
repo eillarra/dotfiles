@@ -6,8 +6,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
 echo
 print_step 'Configure macOS'
 
-ask_for_sudo
-
 
 #
 # Folder structure
@@ -29,8 +27,8 @@ defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
 defaults write NSGlobalDomain AppleMetricUnits -bool true
 print_info 'en_BE, EUR, metric units'
 
-# Set the timezone; see `sudo systemsetup -listtimezones` for other values
-sudo systemsetup -settimezone "Europe/Brussels" > /dev/null
+# Set the timezone; see `systemsetup -listtimezones` for other values
+systemsetup -settimezone "Europe/Brussels" &> /dev/null
 
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
@@ -40,6 +38,7 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 # UI/UX
 #
 print_success 'General UI/UX'
+
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
@@ -55,7 +54,11 @@ defaults write NSGlobalDomain AppleInterfaceStyle Dark
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
 print_info "Interface style set to \"Dark\""
 
-launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist 2> /dev/null
+mdutil -i off / &> /dev/null
+launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist &> /dev/null
+print_info 'Spotlight server disabled'
+
+launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist &> /dev/null
 print_info 'Notification Center disabled'
 
 defaults write com.apple.assistant.support "Assistant Enabled" -bool false

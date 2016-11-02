@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+
+#
+# Update
+#
+alias update="sh ~/.dotfiles/update.sh"
+
+
+#
+# Easier navigation
+#
+alias ..="cd .."
+alias ..2="cd ../.."
+alias ..3="cd ../../.."
+alias ..4="cd ../../../.."
+
+alias ll="ls -lhA"  # Current directory's listing, in long format
+
+
+#
+# Show/hide hidden files in Finder
+#
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+
+
+#
+# Hide/show all desktop icons (useful when presenting)
+#
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"

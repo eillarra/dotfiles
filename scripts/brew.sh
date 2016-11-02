@@ -123,4 +123,5 @@ done
 # Clean up installation files
 #
 print_info "Cleaning up installation files..."
+brew cleanup &> /dev/null
 brew cask cleanup &> /dev/null
