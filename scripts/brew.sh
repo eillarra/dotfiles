@@ -59,6 +59,7 @@ formulas="
     certbot
     gettext
     go
+    heroku
     mysql
     node
     postgresql

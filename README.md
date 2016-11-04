@@ -1,8 +1,7 @@
 .dotfiles
 ---------
-This is a collection of scripts to configure a brand new Mac with my preferences.
-In a fresh installation, I just need to load this repo and run the `install` command
-to have most of my applications running:
+This is how I personalize my system.
+In a fresh installation, I just need to clone this repo and run the `install` command:
 
     $ cd
     $ git clone https://github.com/eillarra/dotfiles .dotfiles
