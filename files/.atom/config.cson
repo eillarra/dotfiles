@@ -8,6 +8,7 @@
   editor:
     fontSize: 12
     preferredLineLength: 119
+    showIndentGuide: true
     softWrap: true
     softWrapAtPreferredLineLength: true
     softWrapHangingIndent: 4
@@ -18,6 +19,8 @@
     usePep257: false
   "tree-view":
     hideVcsIgnoredFiles: true
+  welcome:
+    showOnStartup: false
 ".editorconfig.source":
   editor:
     preferredLineLength: 119

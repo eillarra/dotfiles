@@ -11,11 +11,26 @@ alias update="sh ~/.dotfiles/update.sh"
 # Easier navigation
 #
 alias ..="cd .."
-alias ..2="cd ../.."
-alias ..3="cd ../../.."
-alias ..4="cd ../../../.."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
 
 alias ll="ls -lhA"  # Current directory's listing, in long format
+
+
+#
+# manage Hombrew services
+#
+start() {
+    brew services start $1
+}
+
+stop() {
+    brew services stop $1
+}
+
+alias start=start
+alias stop=stop
 
 
 #
