@@ -22,7 +22,6 @@ print_step 'Atom editor'
 # Install Atom packages
 #
 atompackages="
-    linter
     angular-2-typeScript-snippets
     atom-django
     atom-typescript
@@ -30,7 +29,8 @@ atompackages="
     color-picker
     django-templates
     editorconfig
-    linter-pylama
+    linter
+    linter-flake8
     minimap
     Sublime-Style-Column-Selection
 "

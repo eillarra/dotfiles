@@ -56,12 +56,12 @@ brew tap homebrew/science &> /dev/null
 # Install Homebrew formulas
 #
 formulas="
-    certbot
     gettext
     go
     heroku
     mysql
     node
+    openssl
     postgresql
     pyenv
     pyenv-virtualenv
@@ -72,6 +72,16 @@ for formula in $formulas
 do
     brew_install $formula
 done
+
+# Special case: CURL
+if ! brew list curl &> /dev/null; then
+    print_info "Formula \"curl\" is not installed. Installing…"
+    brew install curl --with-openssl
+    brew link --force curl
+    print_result $? "Install formula \"curl\""
+else
+    print_info "Formula \"curl\" already installed"
+fi
 
 
 #
@@ -85,7 +95,6 @@ applications="
     firefox
     flux
     google-chrome
-    keepassx
     kindle
     lego-digital-designer
     libreoffice
@@ -98,7 +107,6 @@ applications="
     skype
     sourcetree
     the-unarchiver
-    transmission
     vlc
 "
 for application in $applications

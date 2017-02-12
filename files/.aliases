@@ -19,7 +19,7 @@ alias ll="ls -lhA"  # Current directory's listing, in long format
 
 
 #
-# manage Hombrew services
+# Manage Homebrew services
 #
 start() {
     brew services start $1
@@ -31,6 +31,12 @@ stop() {
 
 alias start=start
 alias stop=stop
+
+
+#
+# Passwords
+#
+alias password="dd if=/dev/urandom bs=1 count=40 2>/dev/null | base64"
 
 
 #

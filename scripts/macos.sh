@@ -71,12 +71,13 @@ print_info 'Siri disabled'
 #
 print_success 'Finder'
 
-defaults write com.apple.finder ShowAllFiles -bool true
-defaults write com.apple.finder ShowStatusBar -bool true
+chflags nohidden ~/Library
+defaults write com.apple.finder AppleShowAllFiles -bool true
 defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowPreviewPane -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
 defaults write com.apple.finder ShowTabView -bool true
-defaults write com.apple.finder SidebarWidth -int 175;
+defaults write com.apple.finder SidebarWidth -int 175
 
 # Show all filename extensions in Finder
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -96,6 +97,9 @@ defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 # Avoid creating .DS_Store files on network volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
+# Don't default to saving documents to iCloud
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
 
 #
 # Screeshots
@@ -107,6 +111,27 @@ defaults write com.apple.screencapture location -string "${HOME}/Downloads"
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
+
+
+#
+# Screensaver
+#
+print_success 'Screensaver'
+
+# Set your screen to lock as soon as the screensaver starts
+defaults write com.apple.screensaver askForPassword -bool true
+defaults write com.apple.screensaver askForPasswordDelay -bool false
+
+
+#
+# Miscellaneous
+#
+
+# Disable crash reporter
+defaults write com.apple.CrashReporter DialogType none
+
+# Disable Bonjour multicast advertisements
+sudo defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool true
 
 
 #

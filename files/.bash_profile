@@ -19,3 +19,10 @@ eval "$(pyenv virtualenv-init -)";
 #
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+
+#
+# Homebrew tweaks
+#
+export HOMEBREW_NO_ANALYTICS=1
+export PATH="/usr/local/opt/openssl/bin:$PATH"

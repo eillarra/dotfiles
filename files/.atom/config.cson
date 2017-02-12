@@ -7,7 +7,7 @@
     telemetryConsent: "limited"
   editor:
     fontSize: 12
-    preferredLineLength: 119
+    preferredLineLength: 120
     showIndentGuide: true
     softWrap: true
     softWrapAtPreferredLineLength: true
@@ -15,14 +15,15 @@
     tabLength: 4
   "exception-reporting":
     userId: "efdfecb3-60b6-0183-acc6-044441766cbd"
-  "linter-pylama":
-    usePep257: false
+  "linter-flake8":
+    maxComplexity: 10
+    maxLineLength: 120
   "tree-view":
     hideVcsIgnoredFiles: true
   welcome:
     showOnStartup: false
 ".editorconfig.source":
   editor:
-    preferredLineLength: 119
+    preferredLineLength: 120
     softWrapHangingIndent: 4
     tabLength: 4
