@@ -56,6 +56,7 @@ brew tap homebrew/science &> /dev/null
 # Install Homebrew formulas
 #
 formulas="
+    cloc
     gettext
     go
     heroku
