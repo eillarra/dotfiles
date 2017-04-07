@@ -25,12 +25,12 @@ atompackages="
     angular-2-typeScript-snippets
     atom-django
     atom-typescript
-    autoclose-html
     color-picker
     django-templates
     editorconfig
     linter
     linter-flake8
+    magicpython
     minimap
     Sublime-Style-Column-Selection
 "

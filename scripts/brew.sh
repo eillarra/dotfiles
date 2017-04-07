@@ -66,6 +66,7 @@ formulas="
     postgresql
     pyenv
     pyenv-virtualenv
+    python3
     r
     siege
 "

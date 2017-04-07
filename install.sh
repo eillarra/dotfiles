@@ -20,6 +20,12 @@ source "$(dirname "${BASH_SOURCE[0]}")/scripts/brew.sh"
 
 
 #
+# Install some useful Python libraries
+#
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/python.sh"
+
+
+#
 # Install packages for Atom editor
 #
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/atom.sh"

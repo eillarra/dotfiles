@@ -29,3 +29,7 @@
     preferredLineLength: 120
     softWrapHangingIndent: 4
     tabLength: 4
+".python.source":
+  editor:
+    scrollPastEnd: false
+    showInvisibles: false

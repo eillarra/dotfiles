@@ -26,3 +26,9 @@ export LANG=en_US.UTF-8
 #
 export HOMEBREW_NO_ANALYTICS=1
 export PATH="/usr/local/opt/openssl/bin:$PATH"
+
+
+#
+# Django development
+#
+export DJANGO_DEBUG=1
