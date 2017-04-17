@@ -32,12 +32,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/scripts/atom.sh"
 
 
 #
-# Update hosts file
-#
-source "$(dirname "${BASH_SOURCE[0]}")/scripts/hosts.sh"
-
-
-#
 # Create symlinks for .dotfiles
 #
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/dotfiles.sh"

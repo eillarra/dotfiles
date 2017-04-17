@@ -60,14 +60,10 @@ formulas="
     gettext
     go
     heroku
-    mysql
-    node
     openssl
-    postgresql
     pyenv
     pyenv-virtualenv
     python3
-    r
     siege
 "
 for formula in $formulas
@@ -93,18 +89,19 @@ applications="
     atom
     calibre
     citrix-receiver
+    docker
     dropbox
     firefox
     flux
     google-chrome
     kindle
+    kitematic
     lego-digital-designer
     libreoffice
     ngrok
     owncloud
     pgadmin3
     postman
-    rstudio
     sequel-pro
     skype
     sourcetree
