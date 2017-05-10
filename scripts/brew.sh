@@ -100,7 +100,7 @@ applications="
     libreoffice
     ngrok
     owncloud
-    pgadmin3
+    pgadmin4
     postman
     sequel-pro
     skype

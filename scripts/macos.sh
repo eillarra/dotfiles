@@ -12,7 +12,6 @@ print_step 'Configure macOS'
 #
 print_success 'Create custom folders'
 mkdir -p ~/Code
-mkdir -p ~/Dropbox
 
 
 #
