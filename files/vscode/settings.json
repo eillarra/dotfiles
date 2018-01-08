@@ -1,0 +1,23 @@
+{
+    "editor.rulers": [120],
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 120,
+    "files.exclude": {
+        ".vscode": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/.mypy_cache": true
+    },
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Path": "/Users/eillarra/.pyenv/shims/flake8",
+    "python.linting.pylintEnabled": false,
+    "search.exclude": {
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/.mypy_cache": true
+    },
+    "workbench.colorTheme": "Monokai",
+    "workbench.fontAliasing": "antialiased",
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.panel.location": "bottom"
+}

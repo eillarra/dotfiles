@@ -32,6 +32,10 @@ ask_for_sudo() {
     done &> /dev/null &
 }
 
+command_exists() {
+    type "$1" &> /dev/null ;
+}
+
 get_answer() {
     printf "%s" "$REPLY"
 }

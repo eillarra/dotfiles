@@ -26,9 +26,9 @@ source "$(dirname "${BASH_SOURCE[0]}")/scripts/python.sh"
 
 
 #
-# Install packages for Atom editor
+# Configure editor
 #
-source "$(dirname "${BASH_SOURCE[0]}")/scripts/atom.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/editor.sh"
 
 
 #

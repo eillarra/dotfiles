@@ -4,22 +4,22 @@ source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
 
 
 brew_install() {
-    if ! brew list $1 &> /dev/null; then
-        print_info "Formula \"$1\" is not installed. Installing…"
-        brew install $1
-        print_result $? "Install formula \"$1\""
-    else
+    if brew ls --versions $1 > /dev/null; then
         print_info "Formula \"$1\" already installed"
+    else
+        print_info "Formula \"$1\" is not installed. Installing…"
+        brew install $1 &> /dev/null
+        print_result $? "Install formula \"$1\""
     fi
 }
 
 brew_cask_install() {
-    if ! brew cask list $1 &> /dev/null; then
-        print_info "Cask \"$1\" is not installed. Installing…"
-        brew cask install $1
-        print_result $? "Install cask \"$1\""
-    else
+    if brew ls --versions $1 > /dev/null; then
         print_info "Cask \"$1\" already installed"
+    else
+        print_info "Cask \"$1\" is not installed. Installing…"
+        brew cask install $1 &> /dev/null
+        print_result $? "Install cask \"$1\""
     fi
 }
 
@@ -31,7 +31,7 @@ print_step 'Homebrew'
 #
 # Install Homebrew
 #
-if [ ! -f "`which -s brew`" ]; then
+if command_exists brew; then
     print_info 'Homebrew is already installed'
 else
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &> /dev/null
@@ -47,9 +47,15 @@ brew upgrade &> /dev/null
 #
 # Intall Taps
 #
-brew tap caskroom/cask &> /dev/null
-brew tap caskroom/fonts &> /dev/null
-brew tap homebrew/science &> /dev/null
+taps="
+    caskroom/cask
+    caskroom/fonts
+"
+for tap in $taps
+do
+    brew tap $tap &> /dev/null
+    print_result $? "Tap \"$tap\""
+done
 
 
 #
@@ -57,10 +63,12 @@ brew tap homebrew/science &> /dev/null
 #
 formulas="
     cloc
+    ctags
     gettext
-    go
     heroku
+    mysql
     openssl
+    postgresql
     pyenv
     pyenv-virtualenv
     python3
@@ -86,26 +94,25 @@ fi
 # Install applications via Cask
 #
 applications="
-    atom
     calibre
     citrix-receiver
+    dbeaver-community
     docker
     dropbox
     firefox
     flux
     google-chrome
-    kindle
+    java
     kitematic
-    lego-digital-designer
     libreoffice
     ngrok
     owncloud
-    pgadmin4
     postman
     sequel-pro
     skype
     sourcetree
     the-unarchiver
+    visual-studio-code
     vlc
 "
 for application in $applications

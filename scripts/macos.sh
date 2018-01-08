@@ -101,6 +101,15 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 
 #
+# Trackpad
+#
+print_success 'Trackpad'
+
+# Enable App Expose
+defaults write com.apple.dock showAppExposeGestureEnabled -bool true
+
+
+#
 # Screeshots
 #
 print_success 'Screenshots'
