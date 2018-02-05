@@ -1,0 +1,23 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+    {
+        "key": "cmd+k cmd+o",
+        "command": "editor.unfoldRecursively",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "cmd+k ctrl+alt+cmd+[BracketRight]",
+        "command": "-editor.unfoldRecursively",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "cmd+k cmd+p",
+        "command": "editor.foldRecursively",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "cmd+k ctrl+alt+cmd+[BracketLeft]",
+        "command": "-editor.foldRecursively",
+        "when": "editorTextFocus"
+    }
+]

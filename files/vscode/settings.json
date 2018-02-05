@@ -2,6 +2,7 @@
     "editor.rulers": [120],
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
+    "extensions.autoUpdate": true,
     "files.exclude": {
         ".vscode": true,
         "**/*.pyc": true,
@@ -9,7 +10,7 @@
         "**/.mypy_cache": true
     },
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Path": "/Users/eillarra/.pyenv/shims/flake8",
+    "python.linting.flake8Path": "~/.pyenv/shims/flake8",
     "python.linting.pylintEnabled": false,
     "search.exclude": {
         "**/*.pyc": true,
@@ -19,5 +20,5 @@
     "workbench.colorTheme": "Monokai",
     "workbench.fontAliasing": "antialiased",
     "workbench.startupEditor": "newUntitledFile",
-    "workbench.panel.location": "bottom"
+    "window.zoomLevel": 0
 }

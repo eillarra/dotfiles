@@ -30,12 +30,4 @@ brew cleanup &> /dev/null
 print_success "Homebrew updated"
 
 
-#
-# Atom
-#
-print_info "Updating Atom packages..."
-apm upgrade --no-confirm &> /dev/null
-print_success "Atom updated"
-
-
 echo
