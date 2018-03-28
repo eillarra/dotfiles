@@ -8,13 +8,6 @@ source "$(dirname "${BASH_SOURCE[0]}")/.aliases"
 
 
 #
-# pyenv config
-#
-eval "$(pyenv init -)";
-eval "$(pyenv virtualenv-init -)";
-
-
-#
 # UTF-8
 #
 export LC_ALL=en_US.UTF-8
@@ -26,9 +19,4 @@ export LANG=en_US.UTF-8
 #
 export HOMEBREW_NO_ANALYTICS=1
 export PATH="/usr/local/opt/openssl/bin:$PATH"
-
-
-#
-# Django development
-#
-export DJANGO_DEBUG=1
+export PYENV_ROOT="$HOME/.pyenv"

@@ -69,9 +69,9 @@ formulas="
     mysql
     openssl
     postgresql
+    python
     pyenv
-    pyenv-virtualenv
-    python3
+    pipenv
     siege
 "
 for formula in $formulas
