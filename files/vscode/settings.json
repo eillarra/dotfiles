@@ -10,7 +10,6 @@
         "**/.mypy_cache": true
     },
     "python.linting.flake8Enabled": true,
-    "python.linting.flake8Path": "~/.pyenv/shims/flake8",
     "python.linting.pylintEnabled": false,
     "search.exclude": {
         "**/*.pyc": true,
