@@ -94,6 +94,7 @@ fi
 # Install applications via Cask
 #
 applications="
+    brave
     calibre
     citrix-receiver
     dbeaver-community
@@ -109,6 +110,7 @@ applications="
     owncloud
     postman
     sequel-pro
+    skyfonts
     skype
     sourcetree
     the-unarchiver
@@ -118,19 +120,6 @@ applications="
 for application in $applications
 do
     brew_cask_install $application
-done
-
-
-#
-# Install fonts
-#
-fonts="
-    font-open-sans
-    font-roboto
-"
-for font in $fonts
-do
-    brew_cask_install $font
 done
 
 

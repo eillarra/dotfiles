@@ -1,7 +1,9 @@
 {
+    "breadcrumbs.enabled": true,
     "editor.rulers": [120],
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
+    "explorer.confirmDelete": false,
     "extensions.autoUpdate": true,
     "files.exclude": {
         ".vscode": true,
@@ -9,6 +11,9 @@
         "**/__pycache__": true,
         "**/.mypy_cache": true
     },
+    "files.trimFinalNewlines": true,
+    "git.autofetch": true,
+    "python.jediEnabled": false,
     "python.linting.flake8Enabled": true,
     "python.linting.pylintEnabled": false,
     "search.exclude": {
@@ -16,8 +21,10 @@
         "**/__pycache__": true,
         "**/.mypy_cache": true
     },
+    "terminal.integrated.rendererType": "dom",
+    "window.zoomLevel": 0,
     "workbench.colorTheme": "Monokai",
     "workbench.fontAliasing": "antialiased",
     "workbench.startupEditor": "newUntitledFile",
-    "window.zoomLevel": 0
+    "workbench.statusBar.feedback.visible": false
 }
