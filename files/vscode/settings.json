@@ -1,5 +1,4 @@
 {
-    "breadcrumbs.enabled": true,
     "editor.rulers": [120],
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
@@ -25,6 +24,8 @@
     "window.zoomLevel": 0,
     "workbench.colorTheme": "Monokai",
     "workbench.fontAliasing": "antialiased",
+    "workbench.settings.editor": "json",
     "workbench.startupEditor": "newUntitledFile",
-    "workbench.statusBar.feedback.visible": false
+    "workbench.statusBar.feedback.visible": false,
+    "editor.minimap.enabled": true
 }

@@ -50,6 +50,7 @@ brew upgrade &> /dev/null
 taps="
     caskroom/cask
     caskroom/fonts
+    homebrew/cask-versions
 "
 for tap in $taps
 do
@@ -66,13 +67,11 @@ formulas="
     ctags
     gettext
     heroku
-    mysql
+    mysql@5.7
     openssl
     postgresql
-    python
     pyenv
     pipenv
-    siege
 "
 for formula in $formulas
 do
@@ -94,28 +93,29 @@ fi
 # Install applications via Cask
 #
 applications="
-    brave
     calibre
-    citrix-receiver
-    dbeaver-community
+    citrix-workspace
     docker
     dropbox
+    etcher
     firefox
+    firefox-developer-edition
     flux
     google-chrome
+    google-cloud-sdk
     java
-    kitematic
     libreoffice
     ngrok
     owncloud
     postman
     sequel-pro
-    skyfonts
     skype
     sourcetree
     the-unarchiver
     visual-studio-code
     vlc
+    xquartz
+    inkscape
 "
 for application in $applications
 do
@@ -124,8 +124,15 @@ done
 
 
 #
+# Links
+#
+print_info "Creating links for services..."
+brew services start mysql@5.7 &> /dev/null
+brew link --force mysql@5.7 &> /dev/null
+
+
+#
 # Clean up installation files
 #
 print_info "Cleaning up installation files..."
 brew cleanup &> /dev/null
-brew cask cleanup &> /dev/null

@@ -22,12 +22,11 @@ print_step 'VS Code editor'
 # Install editor extensions
 #
 extensions="
-    EditorConfig.EditorConfig
-    PeterJausovec.vscode-docker
     bibhasdn.django-html
     bibhasdn.django-snippets
+    editorconfig.editorconfig
     ms-python.python
-    ms-vscode.azure-account
+    peterjausovec.vscode-docker
     wholroyd.jinja
 "
 for extension in $extensions
