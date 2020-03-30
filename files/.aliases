@@ -19,21 +19,6 @@ alias ll="ls -lhA"  # Current directory's listing, in long format
 
 
 #
-# Manage Homebrew services
-#
-start() {
-    brew services start $1
-}
-
-stop() {
-    brew services stop $1
-}
-
-alias start=start
-alias stop=stop
-
-
-#
 # Passwords
 #
 alias password="dd if=/dev/urandom bs=1 count=40 2>/dev/null | base64"
@@ -42,8 +27,8 @@ alias password="dd if=/dev/urandom bs=1 count=40 2>/dev/null | base64"
 #
 # Show/hide hidden files in Finder
 #
-alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidehidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 
 
 #
@@ -51,3 +36,10 @@ alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && kill
 #
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+
+#
+# Power metrics
+#
+alias sensors="sudo powermetrics --samplers smc -i1 -n1"
+alias temperature="sudo powermetrics|grep -i \"CPU die temperature\""

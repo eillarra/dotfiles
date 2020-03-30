@@ -1,10 +1,16 @@
 {
+    "editor.fontFamily": "Hack, Menlo, Monaco, 'Courier New', monospace",
+    "editor.minimap.enabled": true,
+    "editor.renderControlCharacters": true,
+    "editor.renderWhitespace": "all",
     "editor.rulers": [120],
+    "editor.suggestSelection": "first",
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
     "explorer.confirmDelete": false,
     "extensions.autoUpdate": true,
     "files.exclude": {
+        ".tox": true,
         ".vscode": true,
         "**/*.pyc": true,
         "**/__pycache__": true,
@@ -13,6 +19,7 @@
     "files.trimFinalNewlines": true,
     "git.autofetch": true,
     "python.jediEnabled": false,
+    "python.linting.enabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.pylintEnabled": false,
     "search.exclude": {
@@ -20,12 +27,12 @@
         "**/__pycache__": true,
         "**/.mypy_cache": true
     },
+    "telemetry.enableTelemetry": true,
     "terminal.integrated.rendererType": "dom",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
     "window.zoomLevel": 0,
     "workbench.colorTheme": "Monokai",
     "workbench.fontAliasing": "antialiased",
     "workbench.settings.editor": "json",
-    "workbench.startupEditor": "newUntitledFile",
-    "workbench.statusBar.feedback.visible": false,
-    "editor.minimap.enabled": true
+    "workbench.startupEditor": "none"
 }

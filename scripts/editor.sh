@@ -23,10 +23,9 @@ print_step 'VS Code editor'
 #
 extensions="
     bibhasdn.django-html
-    bibhasdn.django-snippets
     editorconfig.editorconfig
     ms-python.python
-    peterjausovec.vscode-docker
+    visualstudioexptteam.vscodeintellicode
     wholroyd.jinja
 "
 for extension in $extensions

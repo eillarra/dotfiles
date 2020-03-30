@@ -26,4 +26,13 @@ export PYENV_ROOT="$HOME/.pyenv"
 #
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$PYENV_ROOT/bin:$PATH"
+
+
+#
+# openssl
+#
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"

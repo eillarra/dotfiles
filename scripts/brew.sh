@@ -69,9 +69,9 @@ formulas="
     heroku
     mysql@5.7
     openssl
-    postgresql
     pyenv
     pipenv
+    youtube-dl
 "
 for formula in $formulas
 do
@@ -93,24 +93,32 @@ fi
 # Install applications via Cask
 #
 applications="
+    balenaetcher
     calibre
     citrix-workspace
     docker
     dropbox
-    etcher
-    firefox
     firefox-developer-edition
     flux
+    font-hack
+    font-open-sans
+    font-roboto
     google-chrome
     google-cloud-sdk
+    imageoptim
     java
     libreoffice
+    microsoft-teams
+    nextcloud
     ngrok
-    owncloud
+    openemu
+    poedit
     postman
     sequel-pro
     skype
     sourcetree
+    spotify
+    telegram-desktop
     the-unarchiver
     visual-studio-code
     vlc
