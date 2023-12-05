@@ -1,5 +1,17 @@
 {
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": true,
+            "source.organizeImports.ruff": true
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    "azureResourceGroups.selectedSubscriptions": [],
     "editor.fontFamily": "Hack, Menlo, Monaco, 'Courier New', monospace",
+    "editor.hover.enabled": false,
+    "editor.minimap.autohide": true,
+    "editor.inlineSuggest.enabled": true,
     "editor.minimap.enabled": true,
     "editor.renderControlCharacters": true,
     "editor.renderWhitespace": "all",
@@ -8,7 +20,11 @@
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
     "explorer.confirmDelete": false,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
     "extensions.autoUpdate": true,
+    "extensions.ignoreRecommendations": true,
+    "files.autoSave": "afterDelay",
     "files.exclude": {
         ".tox": true,
         ".vscode": true,
@@ -18,21 +34,27 @@
     },
     "files.trimFinalNewlines": true,
     "git.autofetch": true,
-    "python.jediEnabled": false,
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.pylintEnabled": false,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": true,
+        "markdown": true,
+        "scminput": false,
+        "yaml": true,
+        "python": true
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "python.languageServer": "Pylance",
+    "remote.SSH.remoteServerListenOnSocket": false,
     "search.exclude": {
         "**/*.pyc": true,
         "**/__pycache__": true,
         "**/.mypy_cache": true
     },
-    "telemetry.enableTelemetry": true,
-    "terminal.integrated.rendererType": "dom",
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "window.zoomLevel": 0,
+    "telemetry.telemetryLevel": "error",
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.defaultLocation": "editor",
     "workbench.colorTheme": "Monokai",
+    "workbench.editor.enablePreview": false,
     "workbench.fontAliasing": "antialiased",
-    "workbench.settings.editor": "json",
     "workbench.startupEditor": "none"
 }

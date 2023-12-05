@@ -23,9 +23,20 @@ print_step 'VS Code editor'
 #
 extensions="
     bibhasdn.django-html
+    charliermarsh.ruff
+    dbaeumer.vscode-eslint
     editorconfig.editorconfig
+    github.copilot
+    hashicorp.hcl
+    ms-azuretools.vscode-azureappservice
+    ms-azuretools.vscode-azureresourcegroups
+    ms-dotnettools.csharp
+    ms-dotnettools.csdevkit
+    ms-dotnettools.vscodeintellicode-csharp
     ms-python.python
-    visualstudioexptteam.vscodeintellicode
+    ms-python.vscode-pylance
+    vue.volar
+    wayou.vscode-todo-highlight
     wholroyd.jinja
 "
 for extension in $extensions

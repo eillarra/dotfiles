@@ -18,7 +18,7 @@ brew_cask_install() {
         print_info "Cask \"$1\" already installed"
     else
         print_info "Cask \"$1\" is not installed. Installing…"
-        brew cask install $1 &> /dev/null
+        brew install --cask $1 &> /dev/null
         print_result $? "Install cask \"$1\""
     fi
 }
@@ -48,8 +48,10 @@ brew upgrade &> /dev/null
 # Intall Taps
 #
 taps="
-    caskroom/cask
-    caskroom/fonts
+    hashicorp/tap
+    heroku/brew
+    homebrew/cask
+    homebrew/cask-fonts
     homebrew/cask-versions
 "
 for tap in $taps
@@ -64,36 +66,48 @@ done
 #
 formulas="
     cloc
+    cocoapods
+    consul
+    croc
     ctags
+    curl-openssl
+    dotnet
+    ffmpeg
     gettext
+    gdal
+    gh
+    gpg
+    hashicorp/tap/nomad
     heroku
-    mysql@5.7
+    mysql
+    node
+    openssh
     openssl
-    pyenv
     pipenv
-    youtube-dl
+    poetry
+    postgresql
+    postgis
+    pyenv
+    pyenv-virtualenv
+    sqlite
+    libspatialite
+    yarn
+    yt-dlp
+    webp
 "
 for formula in $formulas
 do
     brew_install $formula
 done
 
-# Special case: CURL
-if ! brew list curl &> /dev/null; then
-    print_info "Formula \"curl\" is not installed. Installing…"
-    brew install curl --with-openssl
-    brew link --force curl
-    print_result $? "Install formula \"curl\""
-else
-    print_info "Formula \"curl\" already installed"
-fi
-
 
 #
 # Install applications via Cask
 #
 applications="
+    android-studio
     balenaetcher
+    bricklink-studio
     calibre
     citrix-workspace
     docker
@@ -104,7 +118,6 @@ applications="
     font-open-sans
     font-roboto
     google-chrome
-    google-cloud-sdk
     imageoptim
     java
     libreoffice
@@ -114,14 +127,15 @@ applications="
     openemu
     poedit
     postman
-    sequel-pro
     skype
     sourcetree
     spotify
-    telegram-desktop
+    tableplus
     the-unarchiver
     visual-studio-code
     vlc
+    webex-meetings
+    zoom
     xquartz
     inkscape
 "
@@ -132,11 +146,11 @@ done
 
 
 #
-# Links
+# Services
 #
-print_info "Creating links for services..."
-brew services start mysql@5.7 &> /dev/null
-brew link --force mysql@5.7 &> /dev/null
+print_info "Starting services..."
+brew services start mysql &> /dev/null
+brew services start postgresql &> /dev/null
 
 
 #

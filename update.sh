@@ -25,8 +25,10 @@ print_info "Updating Homebrew..."
 brew update &> /dev/null
 print_info "Updating installed formulas..."
 brew upgrade &> /dev/null
+print_info "Updating cask apps..."
+brew upgrade --cask &> /dev/null
 print_info "Cleaning up installation files..."
-brew cleanup &> /dev/null
+brew cleanup --prune=all &> /dev/null
 print_success "Homebrew updated"
 
 
