@@ -27,12 +27,6 @@ extensions="
     dbaeumer.vscode-eslint
     editorconfig.editorconfig
     github.copilot
-    hashicorp.hcl
-    ms-azuretools.vscode-azureappservice
-    ms-azuretools.vscode-azureresourcegroups
-    ms-dotnettools.csharp
-    ms-dotnettools.csdevkit
-    ms-dotnettools.vscodeintellicode-csharp
     ms-python.python
     ms-python.vscode-pylance
     vue.volar

@@ -40,7 +40,10 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 
 
 #
-# Power metrics
+# Drums
 #
-alias sensors="sudo powermetrics --samplers smc -i1 -n1"
-alias temperature="sudo powermetrics|grep -i \"CPU die temperature\""
+alias mp3='yt-dlp --extract-audio --audio-format mp3'
+
+drums() {
+    yt-dlp -o - --extract-audio --audio-format mp3 "$1" | ffmpeg -i pipe: -acodec pcm_s16le -ar 44100 "$1.wav"
+}

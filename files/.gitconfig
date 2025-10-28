@@ -3,6 +3,7 @@
 	email = eneko@illarra.com
 [core]
 	excludesfile = /Users/eillarra/.gitignore
+	abbrev = 7
 [commit]
 	template = ~/.gitmessage
 [filter "lfs"]
@@ -18,3 +19,5 @@
 	trustExitCode = true
 [init]
 	defaultBranch = master
+[fetch]
+	recurseSubmodules = on-demand

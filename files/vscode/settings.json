@@ -1,21 +1,30 @@
 {
-    "[python]": {
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.fixAll.ruff": true,
-            "source.organizeImports.ruff": true
-        },
-        "editor.defaultFormatter": "charliermarsh.ruff"
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "azureResourceGroups.selectedSubscriptions": [],
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit"
+        }
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "editor.fontFamily": "Hack, Menlo, Monaco, 'Courier New', monospace",
+    "editor.formatOnSave": true,
     "editor.hover.enabled": false,
-    "editor.minimap.autohide": true,
+    "editor.minimap.autohide": "mouseover",
     "editor.inlineSuggest.enabled": true,
     "editor.minimap.enabled": true,
     "editor.renderControlCharacters": true,
     "editor.renderWhitespace": "all",
-    "editor.rulers": [120],
+    "editor.rulers": [
+        120
+    ],
     "editor.suggestSelection": "first",
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 120,
@@ -33,25 +42,24 @@
         "**/.mypy_cache": true
     },
     "files.trimFinalNewlines": true,
-    "git.autofetch": true,
+    "git.openRepositoryInParentFolders": "always",
     "github.copilot.enable": {
         "*": true,
         "plaintext": true,
+        "python": true,
         "markdown": true,
         "scminput": false,
-        "yaml": true,
-        "python": true
+        "yaml": true
     },
     "javascript.updateImportsOnFileMove.enabled": "always",
+    "python.analysis.typeCheckingMode": "strict",
     "python.languageServer": "Pylance",
-    "remote.SSH.remoteServerListenOnSocket": false,
     "search.exclude": {
         "**/*.pyc": true,
         "**/__pycache__": true,
         "**/.mypy_cache": true
     },
     "telemetry.telemetryLevel": "error",
-    "terminal.integrated.enableMultiLinePasteWarning": false,
     "terminal.integrated.defaultLocation": "editor",
     "workbench.colorTheme": "Monokai",
     "workbench.editor.enablePreview": false,

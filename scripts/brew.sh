@@ -45,52 +45,27 @@ brew upgrade &> /dev/null
 
 
 #
-# Intall Taps
-#
-taps="
-    hashicorp/tap
-    heroku/brew
-    homebrew/cask
-    homebrew/cask-fonts
-    homebrew/cask-versions
-"
-for tap in $taps
-do
-    brew tap $tap &> /dev/null
-    print_result $? "Tap \"$tap\""
-done
-
-
-#
 # Install Homebrew formulas
 #
 formulas="
     cloc
-    cocoapods
-    consul
     croc
-    ctags
-    curl-openssl
-    dotnet
+    curl
     ffmpeg
     gettext
     gdal
-    gh
     gpg
-    hashicorp/tap/nomad
-    heroku
     mysql
     node
     openssh
     openssl
-    pipenv
-    poetry
     postgresql
     postgis
     pyenv
     pyenv-virtualenv
     sqlite
     libspatialite
+    uv
     yarn
     yt-dlp
     webp
@@ -105,26 +80,22 @@ done
 # Install applications via Cask
 #
 applications="
-    android-studio
     balenaetcher
-    bricklink-studio
     calibre
-    citrix-workspace
+    citric-workspace
     docker
     dropbox
-    firefox-developer-edition
+    firefox@developer-edition
     flux
     font-hack
     font-open-sans
     font-roboto
     google-chrome
     imageoptim
-    java
     libreoffice
     microsoft-teams
     nextcloud
     ngrok
-    openemu
     poedit
     postman
     skype
@@ -134,7 +105,7 @@ applications="
     the-unarchiver
     visual-studio-code
     vlc
-    webex-meetings
+    webex
     zoom
     xquartz
     inkscape
