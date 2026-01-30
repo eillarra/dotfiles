@@ -18,8 +18,18 @@ export LANG=en_US.UTF-8
 # Homebrew tweaks
 #
 export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_ENV_HINTS=1
 export PATH="/usr/local/sbin:$PATH"
 ln -s /opt/homebrew/lib ~/lib
+
+
+#
+# curl-openssl
+#
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/curl/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/curl/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/curl/lib/pkgconfig"
 
 
 #
@@ -38,56 +48,19 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/mysql@8.0/lib/pkgconfig"
 
 
 #
-# postgresql@14
+# postgresql@18
 #
-export PATH="/opt/homebrew/opt/postgresql@14/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/postgresql@18/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/postgresql@18/include"
 
 
 #
-# openjdk
+# node@24
 #
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-export CPPFLAGS="-I/opt/homebrew/opt/openjdk/include"
-
-
-#
-# curl-openssl
-#
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/curl/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/curl/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/curl/lib/pkgconfig"
-
-
-#
-# ruby
-#
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/usr/local/lib/ruby/gems/3.1.0/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
-
-#
-# docker
-#
-export PATH="$PATH:/Applications/Docker.app/Contents/Resources/bin/"
-
-
-#
-# node
-#
-export PATH="/opt/homebrew/opt/node/bin:$PATH"
-
-
-#
-# dotnet
-#
-export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
-
+export PATH="/opt/homebrew/opt/node@24/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/node@24/include"
 
 #
 # pyenv

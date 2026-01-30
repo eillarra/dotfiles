@@ -38,6 +38,10 @@ else
     print_result $? 'Homebrew installed'
 fi
 
+cd /opt/homebrew/bin/
+PATH=$PATH:/opt/homebrew/bin
+echo export PATH=$PATH:/opt/homebrew/bin >> ~/.zshrc
+
 print_info "Updating Homebrew..."
 brew update &> /dev/null
 print_info "Updating installed formulas..."
@@ -55,14 +59,16 @@ formulas="
     gettext
     gdal
     gpg
-    mysql
-    node
+    mysql@8.0
+    node@24
     openssh
     openssl
-    postgresql
+    pango
+    postgresql@18
     postgis
     pyenv
     pyenv-virtualenv
+    redis
     sqlite
     libspatialite
     uv
@@ -82,8 +88,6 @@ done
 applications="
     balenaetcher
     calibre
-    citric-workspace
-    docker
     dropbox
     firefox@developer-edition
     flux
@@ -92,23 +96,19 @@ applications="
     font-roboto
     google-chrome
     imageoptim
+    inkscape
     libreoffice
     microsoft-teams
     nextcloud
     ngrok
     poedit
     postman
-    skype
     sourcetree
-    spotify
     tableplus
     the-unarchiver
     visual-studio-code
     vlc
-    webex
     zoom
-    xquartz
-    inkscape
 "
 for application in $applications
 do
@@ -120,8 +120,9 @@ done
 # Services
 #
 print_info "Starting services..."
-brew services start mysql &> /dev/null
-brew services start postgresql &> /dev/null
+brew services start mysql@8.0 &> /dev/null
+brew services start postgresql@18 &> /dev/null
+brew services start redis &> /dev/null
 
 
 #
