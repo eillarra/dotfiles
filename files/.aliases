@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-
 #
-# Update
+# Dotfiles
 #
-alias update="sh ~/.dotfiles/update.sh"
-
+alias dot_update="bash ~/.dotfiles/update.sh"
+alias dot_reinstall="bash ~/.dotfiles/reinstall.sh"
 
 #
 # Easier navigation
@@ -18,12 +17,10 @@ alias .....="cd ../../../.."
 alias ll="ls -lhA"  # Current directory's listing, in long format
 alias ducks="du -cks * | sort -rn | head"
 
-
 #
 # Passwords
 #
-alias password="dd if=/dev/urandom bs=1 count=40 2>/dev/null | base64"
-
+alias password="dd if=/dev/urandom bs=40 count=1 2>/dev/null | base64"
 
 #
 # Show/hide hidden files in Finder
@@ -31,13 +28,11 @@ alias password="dd if=/dev/urandom bs=1 count=40 2>/dev/null | base64"
 alias hidehidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 
-
 #
 # Hide/show all desktop icons (useful when presenting)
 #
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
 
 #
 # Drums
@@ -45,5 +40,24 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 alias mp3='yt-dlp --extract-audio --audio-format mp3'
 
 drums() {
-    yt-dlp -o - --extract-audio --audio-format mp3 "$1" | ffmpeg -i pipe: -acodec pcm_s16le -ar 44100 "$1.wav"
+    yt-dlp -o - --extract-audio --audio-format mp3 -- "$1" | ffmpeg -i pipe: -acodec pcm_s16le -ar 44100 -- "$1.wav"
+}
+
+mp3towav() {
+    ffmpeg -i "$1" -acodec pcm_s16le -ar 44100 "${1%.*}.wav"
+}
+
+#
+# Headroom proxy → `claude` and `ollama`
+#
+proxy_llms() {
+    HEADROOM_EMBEDDER_RUNTIME="pytorch_mps"
+    OPENAI_API_BASE="http://127.0.0.1:11434/v1" \
+    OPENAI_API_KEY="sk-placeholder-key-for-ollama" \
+    headroom proxy \
+        --openai-api-url http://127.0.0.1:11434 \
+        --provider-name ollama \
+        --port 8787 \
+        --code-aware \
+        "$@"
 }

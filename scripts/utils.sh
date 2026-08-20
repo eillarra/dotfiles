@@ -1,23 +1,6 @@
 #!/bin/bash
 # See: https://github.com/alrra/dotfiles/blob/master/src/os/utils.sh
 
-answer_is_yes() {
-    [[ "$REPLY" =~ ^[Yy]$ ]] \
-        && return 0 \
-        || return 1
-}
-
-ask() {
-    print_question "$1"
-    read -r
-}
-
-ask_for_confirmation() {
-    print_question "$1 (y/n) "
-    read -r -n 1
-    printf "\n"
-}
-
 ask_for_sudo() {
     # Ask for the administrator password upfront.
     sudo -v &> /dev/null
@@ -33,21 +16,14 @@ ask_for_sudo() {
 }
 
 command_exists() {
-    type "$1" &> /dev/null ;
+    type "$1" &> /dev/null
 }
 
-get_answer() {
-    printf "%s" "$REPLY"
-}
-
-print_error() {
-    print_in_red "   [✖] $1 $2\n"
-}
-
-print_error_stream() {
-    while read -r line; do
-        print_error "↳ ERROR: $line"
-    done
+# Run a command, indenting its output 4 spaces so it nests under a print_info line.
+# Returns the command's exit status (not awk's).
+run_indent() {
+    "$@" 2>&1 | awk '{ print "    " $0; fflush() }'
+    return ${PIPESTATUS[0]}
 }
 
 print_in_color() {
@@ -73,12 +49,20 @@ print_in_red() {
     print_in_color "$1" 1
 }
 
-print_in_yellow() {
-    print_in_color "$1" 3
+print_step() {
+    print_in_purple "==> $1\n"
 }
 
-print_question() {
-    print_in_yellow "   [?] $1"
+print_info() {
+    print_in_cyan "[i] $1\n"
+}
+
+print_success() {
+    print_in_green "[✔] $1\n"
+}
+
+print_error() {
+    print_in_red "[✖] $1\n"
 }
 
 print_result() {
@@ -89,28 +73,4 @@ print_result() {
     fi
 
     return "$1"
-}
-
-print_step() {
-    print_in_purple "   ==> $1\n"
-}
-
-print_info() {
-    print_in_cyan "   [i] $1\n"
-}
-
-print_success() {
-    print_in_green "   [✔] $1\n"
-}
-
-print_warning() {
-    print_in_yellow "   [!] $1\n"
-}
-
-symlink() {
-    if [[ -f $2 ]]
-    then
-        rm $2
-    fi
-    ln -s $1 $2
 }

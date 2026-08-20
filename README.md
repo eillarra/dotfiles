@@ -1,14 +1,27 @@
-.dotfiles
----------
+# .dotfiles
+
 This is how I personalize my system.
-In a fresh installation, I just need to clone this repo and run the `install` command:
+In a fresh installation, I just need to clone this repo and run the install script:
 
-    $ cd
-    $ git clone https://github.com/eillarra/dotfiles .dotfiles
-    $ sh .dotfiles/install.sh
+```bash
+cd
+git clone https://github.com/eillarra/dotfiles .dotfiles
+bash .dotfiles/install.sh
+```
 
-Updates
--------
-The following command should run most of the critical updates:
+## Reinstall
 
-    $ update
+Re-run Homebrew formulas/casks and dotfile symlinks
+(without Xcode/macOS setup):
+
+```bash
+dot_reinstall
+```
+
+## Updates
+
+Update macOS + Homebrew packages:
+
+```bash
+dot_update
+```

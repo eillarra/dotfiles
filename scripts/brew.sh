@@ -2,31 +2,31 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
 
+ask_for_sudo
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 brew_install() {
-    if brew ls --versions $1 > /dev/null; then
+    if brew ls --versions "$1" > /dev/null; then
         print_info "Formula \"$1\" already installed"
     else
         print_info "Formula \"$1\" is not installed. Installing…"
-        brew install $1 &> /dev/null
+        run_indent brew install "$1"
         print_result $? "Install formula \"$1\""
     fi
 }
 
 brew_cask_install() {
-    if brew ls --versions $1 > /dev/null; then
+    if brew ls --cask --versions "$1" > /dev/null 2>&1; then
         print_info "Cask \"$1\" already installed"
     else
         print_info "Cask \"$1\" is not installed. Installing…"
-        brew install --cask $1 &> /dev/null
+        run_indent brew install --cask "$1"
         print_result $? "Install cask \"$1\""
     fi
 }
 
-
 echo
 print_step 'Homebrew'
-
 
 #
 # Install Homebrew
@@ -34,19 +34,15 @@ print_step 'Homebrew'
 if command_exists brew; then
     print_info 'Homebrew is already installed'
 else
-    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &> /dev/null
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &> /dev/null
     print_result $? 'Homebrew installed'
 fi
 
-cd /opt/homebrew/bin/
-PATH=$PATH:/opt/homebrew/bin
-echo export PATH=$PATH:/opt/homebrew/bin >> ~/.zshrc
-
-print_info "Updating Homebrew..."
-brew update &> /dev/null
-print_info "Updating installed formulas..."
-brew upgrade &> /dev/null
-
+if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 #
 # Install Homebrew formulas
@@ -57,40 +53,38 @@ formulas="
     curl
     ffmpeg
     gettext
-    gdal
     gpg
     mysql@8.0
     node@24
+    ollama
     openssh
     openssl
     pango
     postgresql@18
-    postgis
     pyenv
     pyenv-virtualenv
     redis
     sqlite
-    libspatialite
     uv
+    webp
+    wget
     yarn
     yt-dlp
-    webp
 "
 for formula in $formulas
 do
     brew_install $formula
 done
 
-
 #
 # Install applications via Cask
 #
 applications="
-    balenaetcher
+    blackhole-2ch
     calibre
     dropbox
     firefox@developer-edition
-    flux
+    flux-app
     font-hack
     font-open-sans
     font-roboto
@@ -101,13 +95,10 @@ applications="
     microsoft-teams
     nextcloud
     ngrok
-    poedit
-    postman
-    sourcetree
     tableplus
     the-unarchiver
-    visual-studio-code
     vlc
+    zed
     zoom
 "
 for application in $applications
@@ -115,15 +106,14 @@ do
     brew_cask_install $application
 done
 
-
 #
 # Services
 #
 print_info "Starting services..."
 brew services start mysql@8.0 &> /dev/null
+brew services start ollama &> /dev/null
 brew services start postgresql@18 &> /dev/null
 brew services start redis &> /dev/null
-
 
 #
 # Clean up installation files

@@ -2,13 +2,10 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
 
-
 ask_for_sudo
-
 
 echo
 print_step 'Install Xcode Command Line Tools'
-
 
 #
 # Install Xcode Command Line Tools

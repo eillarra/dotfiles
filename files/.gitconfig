@@ -1,9 +1,13 @@
 [user]
-	name = Eneko Illarramendi
+	name = Eneko
 	email = eneko@illarra.com
 [core]
-	excludesfile = /Users/eillarra/.gitignore
+	excludesfile = ~/.gitignore
 	abbrev = 7
+[init]
+	defaultBranch = main
+[fetch]
+	recurseSubmodules = on-demand
 [commit]
 	template = ~/.gitmessage
 [filter "lfs"]
@@ -17,7 +21,9 @@
 [mergetool "sourcetree"]
 	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
-[init]
-	defaultBranch = master
-[fetch]
-	recurseSubmodules = on-demand
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
