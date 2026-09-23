@@ -20,8 +20,8 @@ Append these sections **on top of** `python.md` when the backend is an MCP serve
 
 MCP tool docstrings are **not** documentation for human developers — they are instructions sent verbatim to the LLM as the tool's system prompt. Write them accordingly:
 
-- **Opening line**: tell the model *when* to call the tool ("Call this when…"), not what it returns.
-- **Body**: explain how to *interpret and act on* the result — which fields to prioritise, what decisions to make, what to avoid.
+- **Opening line**: tell the model _when_ to call the tool ("Call this when…"), not what it returns.
+- **Body**: explain how to _interpret and act on_ the result — which fields to prioritise, what decisions to make, what to avoid.
 - **`:param` lines**: keep these as usage instructions (how to call correctly), not prose descriptions.
 - **Avoid passive voice** like "Returns a list of…" — the model already sees the return type.
 - **Tone**: direct second-person ("use `complexity_level` to…", "never persist without…").

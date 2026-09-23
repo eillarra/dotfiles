@@ -1,10 +1,10 @@
 ---
 name: caveman
 description: >
-  Ultra-compressed communication mode. Cuts output tokens ~65% (measured) by speaking like caveman
-  while keeping full technical accuracy. Use when user says "caveman mode", "talk like caveman",
-  "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers when token
-  efficiency is requested. Off only: "stop caveman" / "normal mode".
+    Ultra-compressed communication mode. Cuts output tokens ~65% (measured) by speaking like caveman
+    while keeping full technical accuracy. Use when user says "caveman mode", "talk like caveman",
+    "use caveman", "less tokens", "be brief", or invokes /caveman. Also auto-triggers when token
+    efficiency is requested. Off only: "stop caveman" / "normal mode".
 ---
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.
@@ -27,14 +27,17 @@ Not: "Sure! I'd be happy to help you with that. The issue you're experiencing is
 Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 Example — "Why React component re-render?"
+
 > New object ref each render. Inline object prop = new ref = re-render. Wrap in `useMemo`.
 
 Example — "Explain database connection pooling."
+
 > Pool reuse open DB connections. No new connection per request. Skip handshake overhead.
 
 ## Auto-Clarity
 
 Drop caveman when:
+
 - Security warnings
 - Irreversible action confirmations
 - Multi-step sequences where fragment order or omitted conjunctions risk misread
@@ -46,9 +49,11 @@ Resume caveman after clear part done.
 Example — destructive op:
 
 > **Warning:** This will permanently delete all rows in the `users` table and cannot be undone.
+>
 > ```sql
 > DROP TABLE users;
 > ```
+>
 > Verify backup exist first.
 
 ## Boundaries

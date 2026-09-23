@@ -7,5 +7,6 @@
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/brew.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/tools.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/dotfiles.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/agents.sh"
 
 echo
