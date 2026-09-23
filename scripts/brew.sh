@@ -54,9 +54,10 @@ formulas="
     ffmpeg
     gettext
     gpg
-    mysql@8.0
+    mysql@8.4
     node@24
     ollama
+    openspec
     openssh
     openssl
     pango
@@ -86,6 +87,7 @@ applications="
     font-hack
     font-open-sans
     font-roboto
+    font-roboto-slab
     google-chrome
     imageoptim
     inkscape
@@ -108,7 +110,7 @@ done
 # Services
 #
 print_info "Starting services..."
-brew services start mysql@8.0 &> /dev/null
+brew services start mysql@8.4 &> /dev/null
 brew services start ollama &> /dev/null
 brew services start postgresql@18 &> /dev/null
 brew services start redis &> /dev/null
