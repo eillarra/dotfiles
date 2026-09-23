@@ -3,8 +3,13 @@
 #
 # Dotfiles
 #
-alias dot_update="bash ~/.dotfiles/update.sh"
-alias dot_reinstall="bash ~/.dotfiles/reinstall.sh"
+dot() {
+    case "$1" in
+        update)    bash ~/.dotfiles/update.sh ;;
+        reinstall) bash ~/.dotfiles/reinstall.sh ;;
+        *) echo "Usage: dot {update|reinstall}" >&2; return 1 ;;
+    esac
+}
 
 #
 # Easier navigation

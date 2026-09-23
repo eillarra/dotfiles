@@ -1,6 +1,7 @@
 # .dotfiles
 
-This is how I personalize my system.
+My personal macOS setup: shell config and aliases, Homebrew formulas and casks, uv/npm CLI tools, and AI agent skills — managed through a single `dot` command.
+
 In a fresh installation, I just need to clone this repo and run the install script:
 
 ```bash
@@ -9,13 +10,15 @@ git clone https://github.com/eillarra/dotfiles .dotfiles
 bash .dotfiles/install.sh
 ```
 
+Then restart your shell: the `dot` command becomes available.
+
 ## Reinstall
 
 Re-run Homebrew formulas/casks and dotfile symlinks
 (without Xcode/macOS setup):
 
 ```bash
-dot_reinstall
+dot reinstall
 ```
 
 ## Updates
@@ -23,5 +26,5 @@ dot_reinstall
 Update macOS + Homebrew packages:
 
 ```bash
-dot_update
+dot update
 ```
