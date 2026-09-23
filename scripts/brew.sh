@@ -61,8 +61,6 @@ formulas="
     openssl
     pango
     postgresql@18
-    pyenv
-    pyenv-virtualenv
     redis
     sqlite
     uv

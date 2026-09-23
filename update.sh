@@ -26,12 +26,21 @@ brew cleanup --prune=all &> /dev/null
 print_success "Homebrew updated"
 
 #
+# Python
+#
+if command_exists uv; then
+  print_info "Upgrading Python..."
+  run_indent uv python upgrade
+  print_success "Python upgraded"
+fi
+
+#
 # uv tools
 #
 if command_exists uv; then
-    print_info "Upgrading uv tools..."
-    run_indent uv tool upgrade --all
-    print_success "uv tools updated"
+  print_info "Upgrading uv tools..."
+  run_indent uv tool upgrade --all
+  print_success "uv tools updated"
 fi
 
 echo

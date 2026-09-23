@@ -58,13 +58,6 @@ export LDFLAGS="-L/opt/homebrew/opt/node@24/lib ${LDFLAGS:-}"
 export CPPFLAGS="-I/opt/homebrew/opt/node@24/include ${CPPFLAGS:-}"
 
 #
-# pyenv
-#
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-command -v pyenv >/dev/null && eval "$(pyenv init -)"
-
-#
 # nltk
 #
 export NLTK_DATA="$HOME/.cache/nltk_data"
