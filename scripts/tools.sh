@@ -37,3 +37,18 @@ for tool in $tools
 do
     uv_tool_install "$tool"
 done
+
+#
+# Install CLI tools via `npm install -g` (binaries on npm global bin path)
+#
+
+echo
+print_step 'npm tools'
+
+tools="
+
+"
+for tool in $tools
+do
+    npm_tool_install "$tool"
+done
