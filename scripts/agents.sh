@@ -26,6 +26,6 @@ print_info "Symlinks created for AGENTS"
 
 echo
 print_step "Install OpenSpec skills"
-(cd "$HOME" && openspec init --tools agents)
+run_indent bash -c 'cd "$HOME" && openspec init --tools agents --no-animation'
 rm -rf "$HOME/openspec"
 print_info "OpenSpec skills installed"
