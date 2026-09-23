@@ -34,6 +34,9 @@ export PKG_CONFIG_PATH="/opt/homebrew/opt/curl/lib/pkgconfig${PKG_CONFIG_PATH:+:
 # sqlite
 #
 export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/sqlite/lib ${LDFLAGS:-}"
+export CPPFLAGS="-I/opt/homebrew/opt/sqlite/include ${CPPFLAGS:-}"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/sqlite/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 
 #
 # mysql@8.0
