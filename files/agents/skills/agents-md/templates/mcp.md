@@ -88,17 +88,6 @@ The Django ORM is synchronous. MCP tool handlers are `async def` and run on the 
 - `<pkg>/__main__.py` runs the MCP server via stdio transport (dev/CLI): `mcp.run(transport="stdio")`.
 - `<pkg>/__init__.py` constructs the `MCPServer` instance, initialises Sentry (if configured), calls `setup_django()`, then imports `resources` and `tools` to register them.
 
-## Commands (MCP-specific)
-
-[ADAPT: reflect the actual entrypoint from `Procfile*` / `run` / `Dockerfile`. Drop `./run` prefix if no wrapper. Generic Python commands (pytest, ruff, mypy) are in `python.md` → "Commands"; do not repeat them here.]
-
-```
-./run python -m <pkg>                                       # run MCP server via stdio (dev/CLI)
-./run gunicorn <pkg>.server:app --config gunicorn.config.py # prod ASGI
-./run huey_consumer <pkg>.tasks.huey -w 2 -q                # huey worker (if queue exists)
-./run python manage.py <command>                            # Django management commands (indexing, etc.)
-```
-
 ## Things to avoid (MCP-specific)
 
 - Do not import `tools/` or the server entrypoint from `services/`, `models/`, or `tasks/`.

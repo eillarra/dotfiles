@@ -18,18 +18,15 @@ Canonical source of truth for AI coding agents in this repo. [ALIASES: `CLAUDE.m
 
 ## Commands
 
-All project commands via `./run` — loads `.env`, invokes underlying tool. Never call `uv` / `pytest` / `yarn` directly. [ADAPT: drop if no wrapper. Framework commands live in framework sections.]
+All project commands via `./run` — loads `.env`, invokes underlying tool. Never call `uv` / `pytest` / `yarn` directly. [ADAPT: drop if no wrapper. No command lists or code blocks anywhere in `AGENTS.md` — agents read `run` / `pyproject.toml` / `package.json` / `Procfile`. Only a rule about a command (a pre-commit gate, a "never run X") earns a line.]
 
 ## Commit conventions
 
-Conventional Commits: `type(scope): description` — imperative, lowercase, no trailing period, one line, no attribution trailers. Types: `feat` / `fix` / `docs` / `refactor` / `test` / `chore` / `perf`. Breaking: `feat!:` or `BREAKING CHANGE:` footer. Never vague (`wip`, `update`).
+Conventional Commits: `type(scope): description` — imperative, lowercase, no trailing period, one line. Types: `feat` / `fix` / `docs` / `refactor` / `test` / `chore` / `perf`. Breaking: `feat!:` / `BREAKING CHANGE:` footer. Never vague (`wip`, `update`).
 
 ## Git workflow
 
-[ADAPT or DROP if not enforced.]
-
-- Branch from `main` only; `type/short-description` kebab-case.
-- PR early (drafts fine); PR title becomes squash-merge commit, conventional format. One PR per logical change.
+Branch + PR for sensitive areas — auth, permissions, serializers / schemas, payments, security settings, CI workflows — or when in doubt; everything else may go straight to `main`. Never merge your own PR. [Self-contained on purpose: teammates / Copilot don't see the global tiered policy. ADAPT: name concrete paths only where this repo extends a category, e.g. "all of `config/settings/`, not only security settings".]
 
 ## Specs
 

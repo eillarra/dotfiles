@@ -51,10 +51,10 @@ A Sentry section is always added: backend endpoint + frontend endpoint when both
 
 ### What belongs in AGENTS.md vs global skills
 
-- **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), commands / test markers / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
+- **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), command rules (`./run`, pre-commit gate) / test markers with usage rules / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
 - **Named, explicitly-invoked procedures → global skill:** release playbook, model+migration recipe, setup tutorial. Patterns that are merely cross-repo-constant are not skills — they're knowledge the model already has.
 - **Niche domain deep-dives → `docs/agent/<topic>.md`**, one-line pointer from `AGENTS.md`.
-- **Cross-repo agent workflow (OpenSpec usage) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer; never restate specs or OpenSpec workflow steps.
+- **Cross-repo agent workflow (OpenSpec usage, risk-tiered branch/PR policy) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer and a one-line, self-contained `## Git workflow` summary — sensitive-area categories + in-doubt→branch + direct-to-`main` otherwise — because teammates / Copilot don't see the global file. Name concrete paths only for repo-specific extensions the categories don't cover; never restate specs, OpenSpec workflow steps, or the full tiered policy.
 
 ### Inputs to gather before writing
 
@@ -67,8 +67,9 @@ Ask the user (or infer from the repo) before drafting:
 5. **Package managers** — Python: uv (preferred) / pip / poetry / hatch; Frontend: yarn (preferred) / npm / pnpm.
 6. **Sentry endpoints** — backend DSN or project slug; frontend DSN or project slug. For frontend-only repos, list the frontend project only. For backend-only repos, list the backend project only. For fullstack same-repo projects, list both.
 7. **Commit convention** — default Conventional Commits short form; confirm.
-8. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
-9. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
+8. **Git workflow summary** — default one-liner from `main.md` (sensitive-area categories: auth, permissions, serializers/schemas, payments, security settings, CI workflows → branch + PR; in doubt → branch; else direct to `main`). Name concrete paths only for repo-specific extensions the categories don't cover (e.g. a whole `settings/` dir, a bespoke billing module). Confirm with the user.
+9. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
+10. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
 
 ### Legacy files (rare)
 
@@ -92,24 +93,24 @@ Classify anything found:
 
 Compose from the templates in `templates/`:
 
-1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow, specs pointer, testing pointer, Sentry pointer, niche docs pointer).
-2. For any Python project type (`python-lib`, `django`, `fastapi`, `django+vue`, `mcp`): append `templates/python.md` (General/PEP 8, docstrings, commands, pytest AAA + test location/fixtures/coverage, **test-review workflow**, Ruff).
-3. If the backend is Django: append `templates/django.md` (Fat-models-thin-views / ORM efficiency, migrations, API with DRF vs native-views+Pydantic variants, Django commands, Django test patterns: file-suffix conventions, permission-inheritance pattern, test class naming).
-4. If the backend is FastAPI: append `templates/fastapi.md` (routers/dependencies, **Django ORM** (models, migrations, async-route-blocking rule), schemas, background tasks, settings, entrypoint, FastAPI commands).
-5. If the project is an MCP server: append `templates/mcp.md` (tool definitions, **MCP tool docstrings written for the LLM not humans**, Django ORM + async guardrail when applicable, schemas, settings, entrypoint, MCP commands). `mcp.md` is a peer of `fastapi.md` — do **not** also include `fastapi.md` (MCP servers expose tools over the MCP protocol, not REST routers).
+1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow one-liner (categories + repo extensions), specs pointer, testing pointer, Sentry pointer, niche docs pointer).
+2. For any Python project type (`python-lib`, `django`, `fastapi`, `django+vue`, `mcp`): append `templates/python.md` (General/PEP 8, docstrings, Ruff pre-commit gate + `pyproject.toml` pointer, pytest test location/fixtures, **test-review workflow**).
+3. If the backend is Django: append `templates/django.md` (Fat-models-thin-views / ORM efficiency, migrations, API with DRF vs native-views+Pydantic variants, Django test patterns: file-suffix conventions, permission-inheritance pattern, test class naming).
+4. If the backend is FastAPI: append `templates/fastapi.md` (routers/dependencies, **Django ORM** (models, migrations, async-route-blocking rule), schemas, background tasks, settings, entrypoint).
+5. If the project is an MCP server: append `templates/mcp.md` (tool definitions, **MCP tool docstrings written for the LLM not humans**, Django ORM + async guardrail when applicable, schemas, settings, entrypoint). `mcp.md` is a peer of `fastapi.md` — do **not** also include `fastapi.md` (MCP servers expose tools over the MCP protocol, not REST routers).
 6. If the project has any TypeScript codebase (`django+vue`, `vue`, `typescript`): append `templates/typescript.md` (General/strict mode, style + yarn-default, vitest testing — test location/mocking/coverage as one-liners, testing philosophy compressed, **no worked examples**).
-7. If the frontend is Vue (`django+vue`, `vue`): append `templates/vue.md` **on top of** `typescript.md` (Stack, reactivity best practices, component structure, code organisation for testability, form components pointer, Vue commands, Vue-specific testing). In a `django+vue` monorepo, the Vue frontend lives in `/vue/` and follows `typescript`+`vue` rules independently — Django's only role re: the frontend is Inertia (rendering the right page component and providing props). (FastAPI / MCP backends do not ship Vue frontends in this organisation — do not combine `fastapi` or `mcp` with `vue`.)
+7. If the frontend is Vue (`django+vue`, `vue`): append `templates/vue.md` **on top of** `typescript.md` (Stack, reactivity best practices, component structure, code organisation for testability, form components pointer, Vue-specific testing). In a `django+vue` monorepo, the Vue frontend lives in `/vue/` and follows `typescript`+`vue` rules independently — Django's only role re: the frontend is Inertia (rendering the right page component and providing props). (FastAPI / MCP backends do not ship Vue frontends in this organisation — do not combine `fastapi` or `mcp` with `vue`.)
 8. Always append `templates/sentry.md`, filling in: backend + frontend endpoints when both exist in this repo; backend-only when no TS frontend; **frontend-only when the backend lives in a separate repo**. Keep the bug-fix workflow verbatim.
 
-**Adapt every section to the actual repo.** Read `pyproject.toml` / `package.json` / settings / `urls.py` / `routers.py` / `run` script / CI workflows. Do not paste templates verbatim — tailor paths, commands, package manager, version pins, markers, per-file ignores.
+**Adapt every section to the actual repo.** Read `pyproject.toml` / `package.json` / settings / `urls.py` / `routers.py` / `run` script / CI workflows. Do not paste templates verbatim — tailor paths, commands, package manager, version pins. Markers only when they carry a usage rule; never per-file ignores or other config values.
 
 **Target length:** ~1.2k tokens for the composed file, ceiling ~1.5k where repo-specific content earns its place — **real tokenizer tokens** (measure with e.g. `uv run --with tiktoken python -c "import tiktoken; print(len(tiktoken.get_encoding('o200k_base').encode(open('AGENTS.md').read())))"`). Chars/4.2 heuristics undercount code-heavy markdown by ~25–30% (paths and `identifiers` split into several tokens). Every token is loaded into every session. Single-stack projects should land well under 1k; fullstack `django+vue` around 1–1.5k. If a section doesn't pull its weight, move the deep-dive to `docs/agent/<topic>.md` — never delete repo facts to save tokens. Guardrails and failure-mode rules are never cut for the budget — the cost of a wrong drop is broken code shipped. Readability beats squeezing: numbered procedures stay one step per line; don't merge list items to shave bytes.
 
 **The relevance filter — what is actually worth an agent's context?** `AGENTS.md` exists for what the model cannot derive from training data: facts that change when you switch repos, and rules the repo would otherwise see violated. Generic framework craft (AAA tests, `shallowRef` for API data, mock-the-boundary, docstring syntax) is already known — at most one line per idea.
 
-| Keep (repo-specific delta)                                                                                                                                                                                                                             | Compress to one line max (generic craft)                                                                                                                     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `./run` wrapper rule, test locations / markers / naming, config file locations, Sentry slugs, commit format, migration rules, framework-variant contracts (DRF vs native views), shim notes ("no `@inertiajs/vue3` — local `$page` shim + Vue Router") | Testing philosophy (black box / not-our-code / boundary testing), AAA, reactivity guidelines, docstring format details, "prefer pure functions" style advice |
+| Keep (repo-specific delta)                                                                                                                                                                                                                                                           | Compress to one line max (generic craft)                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `./run` wrapper rule, test locations / markers / naming, config file locations, Sentry slugs, commit format, git-workflow extension paths, migration rules, framework-variant contracts (DRF vs native views), shim notes ("no `@inertiajs/vue3` — local `$page` shim + Vue Router") | Testing philosophy (black box / not-our-code / boundary testing), AAA, reactivity guidelines, docstring format details, "prefer pure functions" style advice |
 
 Trim rules:
 
@@ -187,11 +188,12 @@ Scan the repo, compare `AGENTS.md` claims against ground-truth config files, and
 
 ### `--fix`: auto-correct narrow mechanical values only
 
-Fix only values that are pure copies from config files — zero judgement required:
+Fix only mechanical items — zero judgement required:
 
-- **Ruff config**: `target-version`, `line-length`, selected rule sets → copy from `pyproject.toml`.
-- **pytest markers** → copy from `pyproject.toml` `[tool.pytest.ini_options] markers`.
-- **Python version / `target-version`** → copy from `.python-version` or `pyproject.toml` `requires-python`.
+- **Restated config values** (Ruff `target-version` / `line-length` / `select` / per-file ignores, pytest `addopts`, coverage paths) → delete them; leave or add a one-line "config lives in `pyproject.toml`" pointer. The agent reads config directly — copies only drift.
+- **Stale markers** — a marker listed in `AGENTS.md` that `pyproject.toml` no longer defines → remove it.
+- **Python version** → copy from `pyproject.toml` `requires-python`.
+- **Duplicate headings** → drop the duplicate.
 
 Everything else is report-only, even in `--fix` mode. Structural and behavioural drift requires human judgement — the agent does not guess.
 
@@ -199,25 +201,15 @@ Everything else is report-only, even in `--fix` mode. Structural and behavioural
 
 #### Python (if `pyproject.toml` exists)
 
-##### Ruff config
+##### Tool config (Ruff, pytest, coverage)
 
-Read `pyproject.toml` → `[tool.ruff]` and `[tool.ruff.lint]`. Compare against what `AGENTS.md` says in its Style / Ruff section:
+`AGENTS.md` points at `pyproject.toml`; it never restates its values.
 
-| Check                                       | Report | Auto-fix                            |
-| ------------------------------------------- | ------ | ----------------------------------- |
-| `target-version` mismatch                   | ✅     | ✅                                  |
-| `line-length` mismatch                      | ✅     | ✅                                  |
-| Selected rule sets (`select` list) mismatch | ✅     | ✅                                  |
-| Per-file ignores changed                    | ✅     | ❌ (judgement — may be intentional) |
-
-##### pytest markers
-
-Read `pyproject.toml` → `[tool.pytest.ini_options] markers`. Compare against markers listed in `AGENTS.md`:
-
-| Check                                                         | Report | Auto-fix    |
-| ------------------------------------------------------------- | ------ | ----------- |
-| Markers in `AGENTS.md` not in `pyproject.toml` (stale)        | ✅     | ✅ (remove) |
-| Markers in `pyproject.toml` not in `AGENTS.md` (undocumented) | ✅     | ✅ (add)    |
+| Check                                                                                        | Report | Auto-fix              |
+| -------------------------------------------------------------------------------------------- | ------ | --------------------- |
+| `AGENTS.md` restates Ruff / pytest / coverage values (`target-version`, `select`, `addopts`) | ✅     | ✅ (delete → pointer) |
+| Marker listed in `AGENTS.md` not in `pyproject.toml` (stale)                                 | ✅     | ✅ (remove)           |
+| Marker with a usage rule the agent would violate (e.g. `api` vs `site`) not in `AGENTS.md`   | ✅     | ❌                    |
 
 ##### Python version
 
@@ -251,12 +243,12 @@ Read `pyproject.toml` → `dependencies`. Cross-reference against what `AGENTS.m
 
 ##### Commands
 
-Read the `run` script (if exists) to see which subcommands it supports. Read `pyproject.toml` for any script entry points. Compare against commands listed in `AGENTS.md`:
+`AGENTS.md` carries the `./run` rule and command *rules* only (pre-commit gate, "never run X"); agents read `run` / `pyproject.toml` for the commands themselves.
 
 | Check                                                                   | Report | Auto-fix                |
 | ----------------------------------------------------------------------- | ------ | ----------------------- |
-| `AGENTS.md` lists a `./run <cmd>` that the `run` script doesn't support | ✅     | ❌ (may be intentional) |
-| `run` script has a subcommand not documented in `AGENTS.md`             | ✅     | ❌                      |
+| `AGENTS.md` has a command list / code block (bloat)                     | ✅     | ❌                      |
+| `AGENTS.md` mentions a `./run <cmd>` that the `run` script doesn't support | ✅  | ❌ (may be intentional) |
 
 #### Frontend (if `package.json` exists)
 
@@ -270,12 +262,11 @@ Detect from lockfiles: `yarn.lock` → yarn, `package-lock.json` → npm, `pnpm-
 
 ##### Scripts
 
-Read `package.json` → `scripts`. Compare against commands listed in `AGENTS.md`:
+Read `package.json` → `scripts`. Scripts are not listed in `AGENTS.md`; only check what it does mention:
 
-| Check                                                              | Report | Auto-fix |
-| ------------------------------------------------------------------ | ------ | -------- |
-| `AGENTS.md` lists `yarn <script>` but script not in `package.json` | ✅     | ❌       |
-| `package.json` has a script not documented in `AGENTS.md`          | ✅     | ❌       |
+| Check                                                                 | Report | Auto-fix |
+| --------------------------------------------------------------------- | ------ | -------- |
+| `AGENTS.md` mentions `yarn <script>` but script not in `package.json` | ✅     | ❌       |
 
 #### Sentry (if `AGENTS.md` has a Sentry section)
 
@@ -291,12 +282,35 @@ To verify: call `find_organizations()` to confirm the org exists and get its `re
 
 #### OpenSpec
 
-| Check                                                                         | Report | Auto-fix                                     |
-| ----------------------------------------------------------------------------- | ------ | -------------------------------------------- |
-| No `openspec/` dir                                                            | ✅     | ❌ (suggest `openspec init --tools none`)    |
-| `openspec/` exists but `AGENTS.md` has no `## Specs` pointer                  | ✅     | ❌                                           |
-| `AGENTS.md` restates OpenSpec workflow or spec content (lives in global file) | ✅     | ❌                                           |
-| `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name the store | ✅     | ✅ (store variant from `main.md`)            |
+| Check                                                                          | Report | Auto-fix                                  |
+| ------------------------------------------------------------------------------ | ------ | ----------------------------------------- |
+| No `openspec/` dir                                                             | ✅     | ❌ (suggest `openspec init --tools none`) |
+| `openspec/` exists but `AGENTS.md` has no `## Specs` pointer                   | ✅     | ❌                                        |
+| `AGENTS.md` restates OpenSpec workflow or spec content (lives in global file)  | ✅     | ❌                                        |
+| `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name the store | ✅     | ✅ (store variant from `main.md`)         |
+
+#### Git workflow
+
+Report only; sensitive areas and extensions are a judgement call.
+
+| Check                                                                                                                | Report | Auto-fix |
+| -------------------------------------------------------------------------------------------------------------------- | ------ | -------- |
+| No `## Git workflow` section                                                                                         | ✅     | ❌       |
+| Section enumerates concrete paths the category summary already covers (redundant; keep categories + extensions only) | ✅     | ❌       |
+| A named extension path no longer exists                                                                              | ✅     | ❌       |
+| New repo-specific sensitive area beyond the categories, not named as an extension (e.g. a new billing module)        | ✅     | ❌       |
+| Section says "always branch / PR" or restates the full tiered policy in detail                                       | ✅     | ❌       |
+
+#### Template drift (report only)
+
+Read the templates this project type composes from (`templates/main.md` + `python.md` / framework / `sentry.md`) and compare section by section. Templates change; `AGENTS.md` doesn't follow on its own.
+
+| Check                                                                                          | Report | Auto-fix |
+| ---------------------------------------------------------------------------------------------- | ------ | -------- |
+| A template rule changed or was removed but `AGENTS.md` still carries the old wording           | ✅     | ❌       |
+| A template section / guardrail missing from `AGENTS.md` (and applicable to this repo)          | ✅     | ❌       |
+| Same rule stated in two `AGENTS.md` sections (keep it at its most specific level)              | ✅     | ❌       |
+| Composed file over the token budget (measure with tiktoken, see Create mode)                   | ✅     | ❌       |
 
 #### Structural drift (report only, never fix)
 
@@ -312,13 +326,13 @@ These are judgement calls. The agent reports; the user decides.
 ### Procedure
 
 1. **Read `AGENTS.md`** — parse it into sections. Note what claims it makes (commands, config values, framework, deps, Sentry slugs).
-2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`).
+2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`), `.github/workflows/`, and sensitive modules (auth/accounts, `permissions.py`, serializers / schemas, payments/billing, settings).
 3. **Run checks** — go through every check above that applies (Python checks if `pyproject.toml` exists; frontend checks if `package.json` exists; Sentry checks if `AGENTS.md` has a Sentry section and MCP is available).
 4. **Output a drift report** grouped by severity:
     - **🔴 Stale** — `AGENTS.md` claims something the config contradicts.
     - **🟡 Undocumented** — config has something `AGENTS.md` doesn't mention.
     - **🟢 OK** — verified matches (brief summary, not per-check).
-5. **If `--fix`**: apply auto-fixes for the narrow mechanical set only (ruff config, pytest markers, Python version). Use `edit_file` to update the specific lines in `AGENTS.md`. Report each edit made.
+5. **If `--fix`**: apply auto-fixes for the narrow mechanical set only (restated config values, stale markers, Python version, duplicate headings). Use `edit_file` to update the specific lines in `AGENTS.md`. Report each edit made.
 6. **Report-only items**: list them clearly with a one-line "consider updating" note. Do not edit.
 
 ### Report format
@@ -328,8 +342,9 @@ These are judgement calls. The agent reports; the user decides.
 
 ### 🔴 Stale (AGENTS.md contradicts config)
 
-- Ruff `target-version`: AGENTS.md says `py312`, pyproject.toml says `py314` [auto-fixable]
+- Python version: AGENTS.md says 3.12, `.python-version` says 3.14 [auto-fixable]
 - pytest markers: AGENTS.md lists `@pytest.mark.slow` but it's not in pyproject.toml [auto-fixable]
+- Ruff section restates `line-length` / `select` from pyproject.toml [auto-fixable: delete → pointer]
 - Sentry project `tropela-api` not found under org `tropela` [manual review]
 
 ### 🟡 Undocumented (config has, AGENTS.md doesn't mention)
@@ -339,14 +354,14 @@ These are judgement calls. The agent reports; the user decides.
 
 ### 🟢 Verified OK
 
-- Ruff `line-length`: 120 ✓
 - Package manager: yarn ✓
 - DJANGO_SETTINGS_MODULE: matches ✓
 
 ### Auto-fixed (--fix mode)
 
-- Updated Ruff `target-version` → `py314`
-- Updated pytest markers (removed `slow`, added `integration`)
+- Updated Python version → 3.14
+- Removed stale marker `slow`
+- Replaced restated Ruff values with a `pyproject.toml` pointer
 ```
 
 ### What Sync mode does NOT do

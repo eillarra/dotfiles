@@ -13,7 +13,7 @@ Append on top of `main.md` for any Python project. Framework sections (`django.m
 - Docstrings required on public functions, methods, modules.
 - Format: reST, Sphinx-compatible. No type info in docstrings (signatures carry it); `:param` / `:returns` / `:raises` end with period.
 
-Tests: `./run pytest`. [ADAPT: drop `./run` if no wrapper; note if coverage is on via `addopts`. Framework commands in framework sections.]
+`ruff format` + `ruff check <pkg>` clean before commit. Tool config lives in `pyproject.toml` — never restate its values; no inline ignores without a justification comment.
 
 ## Testing (pytest)
 
@@ -28,7 +28,3 @@ When asked to review / audit / add tests:
 1. Read tests first; fix weak assertions before running.
 2. Run adjusted suite — failure after adjustment means real bug.
 3. Fix production code; never weaken test to force green.
-
-## Ruff
-
-Lint + format via Ruff (config in `pyproject.toml`). No inline-ignores without justification. `ruff format . && ruff check <pkg>` before commit; CI enforces clean tree.

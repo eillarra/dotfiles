@@ -27,8 +27,6 @@ Append on top of `python.md`. Adapt `<app>`; prune what doesn't apply.
 - Plain function views with project decorators — real names from `<app>/api/`, don't guess. Pydantic schemas, no DRF serializers.
 - Public endpoints: no auth, `Cache-Control` caching. Private: token auth. [ADAPT from code.]
 
-Commands: `./run server`, `./run huey`, `./run python manage.py migrate`. [ADAPT: drop `./run` if no wrapper, huey if no queue. Makemigrations lives in Migrations above; pytest/ruff in `python.md`.]
-
 ## Testing (Django-specific)
 
 - Markers: [ADAPT: e.g. `api`, `site`, `slow`, `unit` — each with one-line purpose].

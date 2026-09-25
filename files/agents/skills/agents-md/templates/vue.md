@@ -24,8 +24,6 @@ Append on top of `typescript.md`. Prune what doesn't apply.
 
 [DROP if none. One-line pointer at library README only.]
 
-Commands: `corepack enable` once, then `yarn <script>` from `package.json`. [ADAPT: npm/pnpm.]
-
 ## Testing (Vue-specific)
 
 - Components: `@vue/test-utils` mounting; [ADAPT happy-dom / jsdom]. Mock axios / router / Quasar plugins; never hit backend.
