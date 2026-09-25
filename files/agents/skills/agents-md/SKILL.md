@@ -54,6 +54,7 @@ A Sentry section is always added: backend endpoint + frontend endpoint when both
 - **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), commands / test markers / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
 - **Named, explicitly-invoked procedures → global skill:** release playbook, model+migration recipe, setup tutorial. Patterns that are merely cross-repo-constant are not skills — they're knowledge the model already has.
 - **Niche domain deep-dives → `docs/agent/<topic>.md`**, one-line pointer from `AGENTS.md`.
+- **Cross-repo agent workflow (OpenSpec usage) → global `~/.claude/CLAUDE.md`** (`files/zed/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer; never restate specs or OpenSpec workflow steps.
 
 ### Inputs to gather before writing
 
@@ -67,6 +68,7 @@ Ask the user (or infer from the repo) before drafting:
 6. **Sentry endpoints** — backend DSN or project slug; frontend DSN or project slug. For frontend-only repos, list the frontend project only. For backend-only repos, list the backend project only. For fullstack same-repo projects, list both.
 7. **Commit convention** — default Conventional Commits short form; confirm.
 8. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
+9. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
 
 ### Legacy files (rare)
 
@@ -90,7 +92,7 @@ Classify anything found:
 
 Compose from the templates in `templates/`:
 
-1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow, testing pointer, Sentry pointer, niche docs pointer).
+1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow, specs pointer, testing pointer, Sentry pointer, niche docs pointer).
 2. For any Python project type (`python-lib`, `django`, `fastapi`, `django+vue`, `mcp`): append `templates/python.md` (General/PEP 8, docstrings, commands, pytest AAA + test location/fixtures/coverage, **test-review workflow**, Ruff).
 3. If the backend is Django: append `templates/django.md` (Fat-models-thin-views / ORM efficiency, migrations, API with DRF vs native-views+Pydantic variants, Django commands, Django test patterns: file-suffix conventions, permission-inheritance pattern, test class naming).
 4. If the backend is FastAPI: append `templates/fastapi.md` (routers/dependencies, **Django ORM** (models, migrations, async-route-blocking rule), schemas, background tasks, settings, entrypoint, FastAPI commands).
@@ -114,6 +116,7 @@ Trim rules:
 - **Telegraphic bullets for content** (drop articles/filler, merge related bullets); guardrails, [ADAPT] composer notes, and multi-step procedures stay unambiguous full syntax.
 - **No worked examples of generic patterns.** No ❌/✅ code blocks teaching mocking, no ref-type tables, no docstring examples. If a code example isn't about _this repo's_ conventions, it's a token leak.
 - **Minimal skeletons only** for repo-specific patterns the agent would get wrong by guessing (e.g. Django permission-test inheritance: class chain + override mechanism in ~5 lines, not a full test class).
+- **Drop what the agent finds by reading the code**: enumerations (app / entry-point lists, fixture names, auth providers, example filenames), config values (ruff/tsconfig flags, DRF classes, page sizes, coverage paths), script lists already in `package.json`. Keep rules, contracts and guardrails — facts an agent would violate, not ones it would look up. "Never delete repo facts" above protects the former, not the latter.
 - Cut `Things to avoid` blocks that restate the section above them.
 - No "Repo layout" / "Where new code goes" tables; no layering diagrams unless a non-obvious enforced rule. Drop sections for domains the repo doesn't have. Point at config in `pyproject.toml` / `package.json` instead of restating it.
 - Each rule lives at its most specific level only. Framework sections point at the language/main section for the generic rule instead of restating it.
@@ -286,6 +289,15 @@ Parse the Sentry section of `AGENTS.md` for `organizationSlug`, `projectSlugOrId
 
 To verify: call `find_organizations()` to confirm the org exists and get its `regionUrl`. Then call `find_projects(organizationSlug=<slug>, regionUrl=<url>)` to confirm the project slug exists. If the user has Sentry MCP access, use it; if not, skip this section and report "Sentry MCP not available — could not verify".
 
+#### OpenSpec
+
+| Check                                                                         | Report | Auto-fix                                     |
+| ----------------------------------------------------------------------------- | ------ | -------------------------------------------- |
+| No `openspec/` dir                                                            | ✅     | ❌ (suggest `openspec init --tools none`)    |
+| `openspec/` exists but `AGENTS.md` has no `## Specs` pointer                  | ✅     | ❌                                           |
+| `AGENTS.md` restates OpenSpec workflow or spec content (lives in global file) | ✅     | ❌                                           |
+| `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name the store | ✅     | ✅ (store variant from `main.md`)            |
+
 #### Structural drift (report only, never fix)
 
 These are judgement calls. The agent reports; the user decides.
@@ -300,7 +312,7 @@ These are judgement calls. The agent reports; the user decides.
 ### Procedure
 
 1. **Read `AGENTS.md`** — parse it into sections. Note what claims it makes (commands, config values, framework, deps, Sentry slugs).
-2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles.
+2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`).
 3. **Run checks** — go through every check above that applies (Python checks if `pyproject.toml` exists; frontend checks if `package.json` exists; Sentry checks if `AGENTS.md` has a Sentry section and MCP is available).
 4. **Output a drift report** grouped by severity:
     - **🔴 Stale** — `AGENTS.md` claims something the config contradicts.

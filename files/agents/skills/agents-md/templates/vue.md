@@ -24,18 +24,7 @@ Append on top of `typescript.md`. Prune what doesn't apply.
 
 [DROP if none. One-line pointer at library README only.]
 
-## Commands
-
-```
-corepack enable        # one-time
-yarn                   # install deps
-yarn dev               # dev server
-yarn build             # production build
-yarn lint              # eslint
-yarn format            # prettier --write
-yarn typecheck         # vue-tsc --noEmit
-yarn test:unit         # vitest
-```
+Commands: `corepack enable` once, then `yarn <script>` from `package.json`. [ADAPT: npm/pnpm.]
 
 ## Testing (Vue-specific)
 

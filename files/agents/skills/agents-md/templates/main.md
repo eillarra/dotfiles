@@ -31,6 +31,10 @@ Conventional Commits: `type(scope): description` — imperative, lowercase, no t
 - Branch from `main` only; `type/short-description` kebab-case.
 - PR early (drafts fine); PR title becomes squash-merge commit, conventional format. One PR per logical change.
 
+## Specs
+
+`openspec/specs/` is source of truth for behaviour; spec-driven changes via OpenSpec (`openspec/changes/`). [Always include. If no `openspec/` dir, suggest `openspec init --tools none` first. If `openspec/config.yaml` has `store: <id>`, use instead: "Shared OpenSpec store `<id>` (`openspec context` for path): specs + changes live there, not in this repo."]
+
 ## Testing
 
 [Language-specific — see `python.md` / `typescript.md`. Framework patterns in framework sections; no duplication here.]

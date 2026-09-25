@@ -20,33 +20,22 @@ Append on top of `python.md`. Adapt `<app>`; prune what doesn't apply.
 
 ### DRF variant
 
-- Router in `<app>/api/routers.py`; every viewset registered there, explicit `basename`.
-- Serializers / filters / permissions in `<app>/api/serializers/` / `filters/` / `permissions/`.
+- Every viewset registered in `<app>/api/routers.py` with explicit `basename`.
 
 ### Native views + Pydantic variant
 
 - Plain function views with project decorators — real names from `<app>/api/`, don't guess. Pydantic schemas, no DRF serializers.
 - Public endpoints: no auth, `Cache-Control` caching. Private: token auth. [ADAPT from code.]
 
-## Commands
-
-```
-./run server
-./run huey                                        # if queue exists
-./run python manage.py makemigrations <app>
-./run python manage.py migrate
-./run python manage.py makemigrations --check <app>
-```
-
-[ADAPT: drop `./run` if no wrapper, huey if no queue. Generic pytest/ruff commands in `python.md`.]
+Commands: `./run server`, `./run huey`, `./run python manage.py migrate`. [ADAPT: drop `./run` if no wrapper, huey if no queue. Makemigrations lives in Migrations above; pytest/ruff in `python.md`.]
 
 ## Testing (Django-specific)
 
-- `DJANGO_SETTINGS_MODULE = "<app>.settings.test"` (from `pyproject.toml`); markers [ADAPT: e.g. `api`, `site`, `slow`, `unit`].
+- Markers: [ADAPT: e.g. `api`, `site`, `slow`, `unit` — each with one-line purpose].
 
 ### Test file naming suffixes
 
-`_permissions.py` (access by role), `_api.py` (API behaviour), `_serializers.py` (serializer/schema validation), `_validation.py` (validation, business rules), no suffix (model/service/mixed). Examples: `test_jobs_permissions.py`, `test_coupon_validation.py`.
+`_permissions.py` (access by role), `_api.py` (API behaviour), `_serializers.py` (serializer/schema validation), `_validation.py` (validation, business rules), no suffix (model/service/mixed). [ADAPT: keep only suffixes the repo uses.]
 
 ### Permission tests (inheritance pattern)
 
