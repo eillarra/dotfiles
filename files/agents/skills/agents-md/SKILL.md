@@ -54,7 +54,7 @@ A Sentry section is always added: backend endpoint + frontend endpoint when both
 - **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), commands / test markers / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
 - **Named, explicitly-invoked procedures → global skill:** release playbook, model+migration recipe, setup tutorial. Patterns that are merely cross-repo-constant are not skills — they're knowledge the model already has.
 - **Niche domain deep-dives → `docs/agent/<topic>.md`**, one-line pointer from `AGENTS.md`.
-- **Cross-repo agent workflow (OpenSpec usage) → global `~/.claude/CLAUDE.md`** (`files/zed/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer; never restate specs or OpenSpec workflow steps.
+- **Cross-repo agent workflow (OpenSpec usage) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer; never restate specs or OpenSpec workflow steps.
 
 ### Inputs to gather before writing
 

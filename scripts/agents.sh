@@ -16,8 +16,8 @@ mkdir -p ~/.claude
 mkdir -p ~/.config/zed
 ln -sfn "$DIR/agents/skills" ~/.agents/skills
 ln -sfn "$DIR/agents/skills" ~/.claude/skills
-ln -sf "$DIR/zed/AGENTS.md" ~/.config/zed/AGENTS.md
-ln -sf "$DIR/zed/AGENTS.md" ~/.claude/CLAUDE.md
+ln -sf "$DIR/agents/AGENTS.md" ~/.config/zed/AGENTS.md
+ln -sf "$DIR/agents/AGENTS.md" ~/.claude/CLAUDE.md
 print_info "Symlinks created for AGENTS"
 
 #
