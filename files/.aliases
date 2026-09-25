@@ -56,13 +56,14 @@ mp3towav() {
 # Headroom proxy → `claude` and `ollama`
 #
 proxy_llms() {
-    HEADROOM_EMBEDDER_RUNTIME="pytorch_mps"
-    OPENAI_API_BASE="http://127.0.0.1:11434/v1" \
+    HEADROOM_BEACON=off \
+    HEADROOM_EMBEDDER_RUNTIME="pytorch_mps" \
     OPENAI_API_KEY="sk-placeholder-key-for-ollama" \
     headroom proxy \
         --openai-api-url http://127.0.0.1:11434 \
         --provider-name ollama \
         --port 8787 \
         --code-aware \
+        --telemetry \
         "$@"
 }
