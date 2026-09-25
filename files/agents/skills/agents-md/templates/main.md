@@ -26,10 +26,7 @@ Conventional Commits: `type(scope): description` — imperative, lowercase, no t
 
 ## Git workflow
 
-[ADAPT or DROP if not enforced.]
-
-- Branch from `main` only; `type/short-description` kebab-case.
-- PR early (drafts fine); PR title becomes squash-merge commit, conventional format. One PR per logical change.
+PR required (branch + review) for: [ADAPT: this repo's real sensitive paths only, e.g. `accounts/`, `*/permissions.py`, `*/api/serializers.py` or `*/schemas.py`, `payments/`, `config/settings/`, `.github/workflows/`]. Everything else may go straight to `main`. [Tiered policy lives in global guidance — don't restate it. Keep the path list: teammates / Copilot don't see the global file.]
 
 ## Specs
 

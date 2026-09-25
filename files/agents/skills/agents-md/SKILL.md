@@ -54,7 +54,7 @@ A Sentry section is always added: backend endpoint + frontend endpoint when both
 - **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), commands / test markers / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
 - **Named, explicitly-invoked procedures → global skill:** release playbook, model+migration recipe, setup tutorial. Patterns that are merely cross-repo-constant are not skills — they're knowledge the model already has.
 - **Niche domain deep-dives → `docs/agent/<topic>.md`**, one-line pointer from `AGENTS.md`.
-- **Cross-repo agent workflow (OpenSpec usage) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer; never restate specs or OpenSpec workflow steps.
+- **Cross-repo agent workflow (OpenSpec usage, risk-tiered branch/PR policy) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer and the `## Git workflow` PR-required path list; never restate specs, OpenSpec workflow steps or the tiered policy.
 
 ### Inputs to gather before writing
 
@@ -67,8 +67,9 @@ Ask the user (or infer from the repo) before drafting:
 5. **Package managers** — Python: uv (preferred) / pip / poetry / hatch; Frontend: yarn (preferred) / npm / pnpm.
 6. **Sentry endpoints** — backend DSN or project slug; frontend DSN or project slug. For frontend-only repos, list the frontend project only. For backend-only repos, list the backend project only. For fullstack same-repo projects, list both.
 7. **Commit convention** — default Conventional Commits short form; confirm.
-8. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
-9. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
+8. **PR-required paths** — infer from the repo layout: auth/accounts app, `permissions.py`, serializers / Pydantic schemas, payments/billing app, security settings, `.github/workflows/`. Confirm with the user. Real paths only; drop categories the repo doesn't have.
+9. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
+10. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
 
 ### Legacy files (rare)
 
@@ -92,7 +93,7 @@ Classify anything found:
 
 Compose from the templates in `templates/`:
 
-1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow, specs pointer, testing pointer, Sentry pointer, niche docs pointer).
+1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow (PR-required paths), specs pointer, testing pointer, Sentry pointer, niche docs pointer).
 2. For any Python project type (`python-lib`, `django`, `fastapi`, `django+vue`, `mcp`): append `templates/python.md` (General/PEP 8, docstrings, commands, pytest AAA + test location/fixtures/coverage, **test-review workflow**, Ruff).
 3. If the backend is Django: append `templates/django.md` (Fat-models-thin-views / ORM efficiency, migrations, API with DRF vs native-views+Pydantic variants, Django commands, Django test patterns: file-suffix conventions, permission-inheritance pattern, test class naming).
 4. If the backend is FastAPI: append `templates/fastapi.md` (routers/dependencies, **Django ORM** (models, migrations, async-route-blocking rule), schemas, background tasks, settings, entrypoint, FastAPI commands).
@@ -109,7 +110,7 @@ Compose from the templates in `templates/`:
 
 | Keep (repo-specific delta)                                                                                                                                                                                                                             | Compress to one line max (generic craft)                                                                                                                     |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `./run` wrapper rule, test locations / markers / naming, config file locations, Sentry slugs, commit format, migration rules, framework-variant contracts (DRF vs native views), shim notes ("no `@inertiajs/vue3` — local `$page` shim + Vue Router") | Testing philosophy (black box / not-our-code / boundary testing), AAA, reactivity guidelines, docstring format details, "prefer pure functions" style advice |
+| `./run` wrapper rule, test locations / markers / naming, config file locations, Sentry slugs, commit format, PR-required paths, migration rules, framework-variant contracts (DRF vs native views), shim notes ("no `@inertiajs/vue3` — local `$page` shim + Vue Router") | Testing philosophy (black box / not-our-code / boundary testing), AAA, reactivity guidelines, docstring format details, "prefer pure functions" style advice |
 
 Trim rules:
 
@@ -298,6 +299,17 @@ To verify: call `find_organizations()` to confirm the org exists and get its `re
 | `AGENTS.md` restates OpenSpec workflow or spec content (lives in global file) | ✅     | ❌                                           |
 | `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name the store | ✅     | ✅ (store variant from `main.md`)            |
 
+#### Git workflow
+
+Report only; PR-required paths are a judgement call.
+
+| Check                                                                                                                                                 | Report | Auto-fix |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------- |
+| No `## Git workflow` section, or no PR-required path list                                                                                             | ✅     | ❌       |
+| A listed PR-required path no longer exists                                                                                                            | ✅     | ❌       |
+| Sensitive-looking area not listed (new auth/payments app, new `permissions.py` / serializers / schemas module, `.github/workflows/` present but unlisted) | ✅     | ❌       |
+| Section still says "always branch / PR" or restates the global tiered policy                                                                          | ✅     | ❌       |
+
 #### Structural drift (report only, never fix)
 
 These are judgement calls. The agent reports; the user decides.
@@ -312,7 +324,7 @@ These are judgement calls. The agent reports; the user decides.
 ### Procedure
 
 1. **Read `AGENTS.md`** — parse it into sections. Note what claims it makes (commands, config values, framework, deps, Sentry slugs).
-2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`).
+2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`), `.github/workflows/`, and sensitive modules (auth/accounts, `permissions.py`, serializers / schemas, payments/billing, settings).
 3. **Run checks** — go through every check above that applies (Python checks if `pyproject.toml` exists; frontend checks if `package.json` exists; Sentry checks if `AGENTS.md` has a Sentry section and MCP is available).
 4. **Output a drift report** grouped by severity:
     - **🔴 Stale** — `AGENTS.md` claims something the config contradicts.
