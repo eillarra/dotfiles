@@ -3,12 +3,12 @@ name: agents-md
 description: >
     Create or maintain a repo's canonical AGENTS.md (with CLAUDE.md /
     .github/copilot-instructions.md symlinks). Auto-detects mode — composes
-    AGENTS.md from templates when none exists (Create mode); reports and
-    auto-corrects drift with --fix against the repo's actual config when it
-    already exists (Sync mode). Tailored to Python-backend and Django+Vue
-    projects with Sentry integration. Use when setting up AGENTS.md from
-    scratch, checking if it's still accurate, or after dependency/config
-    changes.
+    AGENTS.md from templates when none exists (Create mode); when it exists,
+    fixes template and config drift in place, keeping existing wording
+    (Sync mode; `--dry-run` report only, `--deep` adds Sentry / source checks).
+    Tailored to Python-backend and Django+Vue projects with Sentry integration.
+    Use when setting up AGENTS.md from scratch, checking or updating it
+    ("sync", "rebuild", "regenerate"), or after template / dependency / config changes.
 ---
 
 # AGENTS.md
@@ -20,8 +20,8 @@ One skill for the whole lifecycle of a repo's `AGENTS.md`: write it when missing
 Check whether `AGENTS.md` exists at the repo root.
 
 - **Missing → Create mode**: compose a new `AGENTS.md` from templates.
-- **Exists → Sync mode**: read-only drift report by default; `--fix` auto-corrects a
-  narrow set of mechanical values.
+- **Exists → Sync mode** (also for "rebuild", "regenerate", "check", "update"): fix template + config drift
+  in place. Never recompose an existing file from scratch.
 
 ---
 
@@ -100,7 +100,7 @@ Compose from the templates in `templates/`:
 5. If the project is an MCP server: append `templates/mcp.md` (tool definitions, **MCP tool docstrings written for the LLM not humans**, Django ORM + async guardrail when applicable, schemas, settings, entrypoint). `mcp.md` is a peer of `fastapi.md` — do **not** also include `fastapi.md` (MCP servers expose tools over the MCP protocol, not REST routers).
 6. If the project has any TypeScript codebase (`django+vue`, `vue`, `typescript`): append `templates/typescript.md` (General/strict mode, style + yarn-default, vitest testing — test location/mocking/coverage as one-liners, testing philosophy compressed, **no worked examples**).
 7. If the frontend is Vue (`django+vue`, `vue`): append `templates/vue.md` **on top of** `typescript.md` (Stack, reactivity best practices, component structure, code organisation for testability, form components pointer, Vue-specific testing). In a `django+vue` monorepo, the Vue frontend lives in `/vue/` and follows `typescript`+`vue` rules independently — Django's only role re: the frontend is Inertia (rendering the right page component and providing props). (FastAPI / MCP backends do not ship Vue frontends in this organisation — do not combine `fastapi` or `mcp` with `vue`.)
-8. Always append `templates/sentry.md`, filling in: backend + frontend endpoints when both exist in this repo; backend-only when no TS frontend; **frontend-only when the backend lives in a separate repo**. Keep the bug-fix workflow verbatim.
+8. Always append `templates/sentry.md`, filling in: backend + frontend endpoints when both exist in this repo; backend-only when no TS frontend; **frontend-only when the backend lives in a separate repo**. Keep all bug-fix workflow steps.
 
 **Adapt every section to the actual repo.** Read `pyproject.toml` / `package.json` / settings / `urls.py` / `routers.py` / `run` script / CI workflows. Do not paste templates verbatim — tailor paths, commands, package manager, version pins. Markers only when they carry a usage rule; never per-file ignores or other config values.
 
@@ -172,200 +172,59 @@ The build + symlink-verify + cleanup + secrets-scan steps above are the whole Cr
 
 ## Sync mode
 
-Detect, and optionally fix, drift between an existing `AGENTS.md` and the actual project configuration.
+Bring an existing `AGENTS.md` back in line with the current templates and the repo's config. Fixes in place by default — the user reviews with `git diff`.
 
-### When to use Sync mode
+- `--dry-run`: report only, no edits.
+- `--deep`: also run the expensive checks (Sentry MCP, source scans). Default runs skip them.
 
-- After dependency changes (added/removed Django, DRF, FastAPI, huey, arq, …).
-- After config changes (ruff rules, pytest markers, Python version, package manager).
-- After renaming a Sentry project or switching Sentry regions.
-- Periodic drift check (e.g. monthly).
-- User says "check AGENTS.md", "sync AGENTS.md", "is AGENTS.md up to date".
+### Reads
 
-### Default: read-only drift report
+Default: `AGENTS.md`, the templates this project type composes from (see Create mode), `pyproject.toml`, `.python-version`, `package.json`, lockfiles, `run`, `openspec/config.yaml`. Paths mentioned in `AGENTS.md` get one existence check (single `ls` / glob) — never read source files.
 
-Scan the repo, compare `AGENTS.md` claims against ground-truth config files, and output a report. No edits. The user reviews and decides what to fix.
+`--deep` adds: Sentry MCP, `<app>/api/` code, sensitive modules (auth / permissions / serializers / payments / settings), `.github/workflows/`.
 
-### `--fix`: auto-correct narrow mechanical values only
+### Reconcile rules
 
-Fix only mechanical items — zero judgement required:
+- Existing wording wins wherever it says the same thing as the template — never reword for template parity.
+- Add template rules the file lacks, only where they apply to this repo; remove rules the repo no longer supports.
+- Never drop repo facts (paths, commands, globs, repo-specific extensions) unless verified stale.
+- Cross-repo policy lines (philosophy, commit conventions, git workflow categories, Sentry workflow) follow the template: a clause the template dropped goes too.
+- Token count grows only by added rules; stay within the Create-mode budget.
 
-- **Restated config values** (Ruff `target-version` / `line-length` / `select` / per-file ignores, pytest `addopts`, coverage paths) → delete them; leave or add a one-line "config lives in `pyproject.toml`" pointer. The agent reads config directly — copies only drift.
-- **Stale markers** — a marker listed in `AGENTS.md` that `pyproject.toml` no longer defines → remove it.
-- **Python version** → copy from `pyproject.toml` `requires-python`.
-- **Duplicate headings** → drop the duplicate.
+### Auto-fix
 
-Everything else is report-only, even in `--fix` mode. Structural and behavioural drift requires human judgement — the agent does not guess.
+- Template drift per the reconcile rules above.
+- Restated config values (Ruff / pytest / coverage) → delete, leave a `pyproject.toml` pointer.
+- Marker in `AGENTS.md` not defined in `pyproject.toml` → remove.
+- Python version → `requires-python` / `.python-version`.
+- `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name it → store variant from `main.md`.
+- Duplicate headings or the same rule in two sections → keep the most specific one.
 
-### What to check
+### Report only (needs the user's call)
 
-#### Python (if `pyproject.toml` exists)
+- **Python**: DRF / huey / arq / celery / FastAPI / `sentry-sdk` claimed but not in deps, or in deps but unmentioned; `DJANGO_SETTINGS_MODULE` mismatch; marker with a usage rule (e.g. `api` vs `site`) missing; `./run <cmd>` the `run` script doesn't support.
+- **Frontend**: package manager contradicts lockfile; `yarn <script>` not in `package.json`.
+- **OpenSpec**: no `openspec/` (suggest `openspec init --tools none`); no `## Specs` pointer; workflow restated.
+- **Git workflow**: section missing; named extension path gone; restates the full tiered policy or enumerates paths the categories cover.
+- **Structure**: mentioned path gone; new significant top-level dir (`tasks/`, `mcp/`, `tools/`) not reflected; command lists / code blocks / worked examples of generic craft (bloat).
+- **`--deep` only**: Sentry org / project / region don't exist or mismatch (`find_organizations`, `find_projects`; skip with a note if MCP unavailable); framework variant contradicts `<app>/api/`; new sensitive area not named as a git-workflow extension.
 
-##### Tool config (Ruff, pytest, coverage)
-
-`AGENTS.md` points at `pyproject.toml`; it never restates its values.
-
-| Check                                                                                        | Report | Auto-fix              |
-| -------------------------------------------------------------------------------------------- | ------ | --------------------- |
-| `AGENTS.md` restates Ruff / pytest / coverage values (`target-version`, `select`, `addopts`) | ✅     | ✅ (delete → pointer) |
-| Marker listed in `AGENTS.md` not in `pyproject.toml` (stale)                                 | ✅     | ✅ (remove)           |
-| Marker with a usage rule the agent would violate (e.g. `api` vs `site`) not in `AGENTS.md`   | ✅     | ❌                    |
-
-##### Python version
-
-Read `.python-version` (if exists) and `pyproject.toml` → `requires-python`. Compare against `AGENTS.md`:
-
-| Check                               | Report | Auto-fix |
-| ----------------------------------- | ------ | -------- |
-| Python version in `AGENTS.md` stale | ✅     | ✅       |
-
-##### DJANGO_SETTINGS_MODULE
-
-Read `pyproject.toml` → `[tool.pytest.ini_options] DJANGO_SETTINGS_MODULE`. Compare against `AGENTS.md`:
-
-| Check                          | Report | Auto-fix                                   |
-| ------------------------------ | ------ | ------------------------------------------ |
-| Settings module value mismatch | ✅     | ❌ (could be intentional for test vs prod) |
-
-##### Framework dependencies
-
-Read `pyproject.toml` → `dependencies`. Cross-reference against what `AGENTS.md` claims:
-
-| Check                                                                         | Report | Auto-fix |
-| ----------------------------------------------------------------------------- | ------ | -------- |
-| `AGENTS.md` mentions DRF but `djangorestframework` not in deps                | ✅     | ❌       |
-| `AGENTS.md` says "no DRF / native views" but `djangorestframework` IS in deps | ✅     | ❌       |
-| `AGENTS.md` mentions huey but `huey` not in deps (or vice versa)              | ✅     | ❌       |
-| `AGENTS.md` mentions arq but `arq` not in deps (or vice versa)                | ✅     | ❌       |
-| `AGENTS.md` mentions celery but `celery` not in deps (or vice versa)          | ✅     | ❌       |
-| `AGENTS.md` mentions FastAPI but `fastapi` not in deps                        | ✅     | ❌       |
-| `AGENTS.md` mentions Sentry but `sentry-sdk` not in deps                      | ✅     | ❌       |
-
-##### Commands
-
-`AGENTS.md` carries the `./run` rule and command *rules* only (pre-commit gate, "never run X"); agents read `run` / `pyproject.toml` for the commands themselves.
-
-| Check                                                                   | Report | Auto-fix                |
-| ----------------------------------------------------------------------- | ------ | ----------------------- |
-| `AGENTS.md` has a command list / code block (bloat)                     | ✅     | ❌                      |
-| `AGENTS.md` mentions a `./run <cmd>` that the `run` script doesn't support | ✅  | ❌ (may be intentional) |
-
-#### Frontend (if `package.json` exists)
-
-##### Package manager
-
-Detect from lockfiles: `yarn.lock` → yarn, `package-lock.json` → npm, `pnpm-lock.yaml` → pnpm. Compare against what `AGENTS.md` says:
-
-| Check                                                                | Report | Auto-fix |
-| -------------------------------------------------------------------- | ------ | -------- |
-| `AGENTS.md` says yarn but `package-lock.json` exists (or vice versa) | ✅     | ❌       |
-
-##### Scripts
-
-Read `package.json` → `scripts`. Scripts are not listed in `AGENTS.md`; only check what it does mention:
-
-| Check                                                                 | Report | Auto-fix |
-| --------------------------------------------------------------------- | ------ | -------- |
-| `AGENTS.md` mentions `yarn <script>` but script not in `package.json` | ✅     | ❌       |
-
-#### Sentry (if `AGENTS.md` has a Sentry section)
-
-Parse the Sentry section of `AGENTS.md` for `organizationSlug`, `projectSlugOrId`, `regionUrl`. Use the Sentry MCP tools to verify:
-
-| Check                                                                 | Report | Auto-fix |
-| --------------------------------------------------------------------- | ------ | -------- |
-| `organizationSlug` doesn't exist (call `find_organizations`)          | ✅     | ❌       |
-| `projectSlugOrId` doesn't exist under that org (call `find_projects`) | ✅     | ❌       |
-| `regionUrl` doesn't match the org's actual region                     | ✅     | ❌       |
-
-To verify: call `find_organizations()` to confirm the org exists and get its `regionUrl`. Then call `find_projects(organizationSlug=<slug>, regionUrl=<url>)` to confirm the project slug exists. If the user has Sentry MCP access, use it; if not, skip this section and report "Sentry MCP not available — could not verify".
-
-#### OpenSpec
-
-| Check                                                                          | Report | Auto-fix                                  |
-| ------------------------------------------------------------------------------ | ------ | ----------------------------------------- |
-| No `openspec/` dir                                                             | ✅     | ❌ (suggest `openspec init --tools none`) |
-| `openspec/` exists but `AGENTS.md` has no `## Specs` pointer                   | ✅     | ❌                                        |
-| `AGENTS.md` restates OpenSpec workflow or spec content (lives in global file)  | ✅     | ❌                                        |
-| `openspec/config.yaml` has `store: <id>` but `## Specs` doesn't name the store | ✅     | ✅ (store variant from `main.md`)         |
-
-#### Git workflow
-
-Report only; sensitive areas and extensions are a judgement call.
-
-| Check                                                                                                                | Report | Auto-fix |
-| -------------------------------------------------------------------------------------------------------------------- | ------ | -------- |
-| No `## Git workflow` section                                                                                         | ✅     | ❌       |
-| Section enumerates concrete paths the category summary already covers (redundant; keep categories + extensions only) | ✅     | ❌       |
-| A named extension path no longer exists                                                                              | ✅     | ❌       |
-| New repo-specific sensitive area beyond the categories, not named as an extension (e.g. a new billing module)        | ✅     | ❌       |
-| Section says "always branch / PR" or restates the full tiered policy in detail                                       | ✅     | ❌       |
-
-#### Template drift (report only)
-
-Read the templates this project type composes from (`templates/main.md` + `python.md` / framework / `sentry.md`) and compare section by section. Templates change; `AGENTS.md` doesn't follow on its own.
-
-| Check                                                                                          | Report | Auto-fix |
-| ---------------------------------------------------------------------------------------------- | ------ | -------- |
-| A template rule changed or was removed but `AGENTS.md` still carries the old wording           | ✅     | ❌       |
-| A template section / guardrail missing from `AGENTS.md` (and applicable to this repo)          | ✅     | ❌       |
-| Same rule stated in two `AGENTS.md` sections (keep it at its most specific level)              | ✅     | ❌       |
-| Composed file over the token budget (measure with tiktoken, see Create mode)                   | ✅     | ❌       |
-
-#### Structural drift (report only, never fix)
-
-These are judgement calls. The agent reports; the user decides.
-
-| Check                                                                                                                                                                               | Report | Auto-fix |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | -------- |
-| `AGENTS.md` mentions a directory that no longer exists                                                                                                                              | ✅     | ❌       |
-| A significant new top-level directory exists that `AGENTS.md` doesn't reflect (e.g. new `tasks/`, new `mcp/`, new `tools/`)                                                         | ✅     | ❌       |
-| `AGENTS.md` claims a framework variant (DRF / native views) that doesn't match the code in `<app>/api/`                                                                             | ✅     | ❌       |
-| `AGENTS.md` carries multi-line worked examples of generic craft knowledge (❌/✅ code blocks, ref-type tables, docstring examples) — bloat; see the relevance filter in Create mode | ✅     | ❌       |
-
-### Procedure
-
-1. **Read `AGENTS.md`** — parse it into sections. Note what claims it makes (commands, config values, framework, deps, Sentry slugs).
-2. **Read config files** — `pyproject.toml`, `package.json`, `run` script, `.python-version`, lockfiles, `openspec/` presence (+ `store:` in `openspec/config.yaml`), `.github/workflows/`, and sensitive modules (auth/accounts, `permissions.py`, serializers / schemas, payments/billing, settings).
-3. **Run checks** — go through every check above that applies (Python checks if `pyproject.toml` exists; frontend checks if `package.json` exists; Sentry checks if `AGENTS.md` has a Sentry section and MCP is available).
-4. **Output a drift report** grouped by severity:
-    - **🔴 Stale** — `AGENTS.md` claims something the config contradicts.
-    - **🟡 Undocumented** — config has something `AGENTS.md` doesn't mention.
-    - **🟢 OK** — verified matches (brief summary, not per-check).
-5. **If `--fix`**: apply auto-fixes for the narrow mechanical set only (restated config values, stale markers, Python version, duplicate headings). Use `edit_file` to update the specific lines in `AGENTS.md`. Report each edit made.
-6. **Report-only items**: list them clearly with a one-line "consider updating" note. Do not edit.
-
-### Report format
+### Output
 
 ```
-## AGENTS.md drift report for [PROJECT]
+## AGENTS.md sync — [PROJECT]
 
-### 🔴 Stale (AGENTS.md contradicts config)
+Edited:
+- Python version 3.13 → 3.14
+- Added: data migrations in own file (django.md)
 
-- Python version: AGENTS.md says 3.12, `.python-version` says 3.14 [auto-fixable]
-- pytest markers: AGENTS.md lists `@pytest.mark.slow` but it's not in pyproject.toml [auto-fixable]
-- Ruff section restates `line-length` / `select` from pyproject.toml [auto-fixable: delete → pointer]
-- Sentry project `tropela-api` not found under org `tropela` [manual review]
-
-### 🟡 Undocumented (config has, AGENTS.md doesn't mention)
-
-- `arq` in dependencies but AGENTS.md doesn't mention a background queue
-- `yarn test:e2e` in package.json but not documented in AGENTS.md
-
-### 🟢 Verified OK
-
-- Package manager: yarn ✓
-- DJANGO_SETTINGS_MODULE: matches ✓
-
-### Auto-fixed (--fix mode)
-
-- Updated Python version → 3.14
-- Removed stale marker `slow`
-- Replaced restated Ruff values with a `pyproject.toml` pointer
+Needs your call:
+- `arq` in deps, no background-queue section
 ```
 
-### What Sync mode does NOT do
+One line per item. No "verified OK" list. Empty section → omit it.
 
-- **Does not regenerate `AGENTS.md` from templates.** That's Create mode.
-- **Does not auto-fix structural or behavioural claims.** Framework variant, queue presence, directory structure, Sentry slugs — all report-only. The agent does not guess whether a change is intentional.
-- **Does not add new sections.** If a new `tasks/` dir appears, it reports "consider documenting" but does not write the section.
+### Never
+
+- Auto-fix structural or behavioural claims (framework variant, queue presence, directory layout, Sentry slugs).
+- Recompose the file from scratch or restyle wording that already says the right thing.

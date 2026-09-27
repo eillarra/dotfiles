@@ -6,11 +6,11 @@ Append on top of `python.md`. Adapt `<app>`; prune what doesn't apply.
 
 - Fat models, thin views; business logic in models/managers. [ADAPT: `services/` layer if the project uses one.]
 - `select_related` / `prefetch_related` against N+1; `values()` / `values_list()` for few columns.
-- Raw SQL only if ORM genuinely can't express query; then `Manager.raw()` / parameterised, never string interpolation.
+- Raw SQL only if ORM can't; then `Manager.raw()` / parameterised, never string interpolation.
 
 ## Migrations
 
-- Never edit shipped migration — always create new via `makemigrations <app>`.
+- Never edit shipped migration — new one via `makemigrations <app>`.
 - Data migrations in own file, reversible where possible.
 - Drift check: `makemigrations --check <app>`.
 
@@ -39,4 +39,4 @@ Append on top of `python.md`. Adapt `<app>`; prune what doesn't apply.
 
 `TestForAnonymous` defines full `expected_status_codes` dict + endpoint tests. `TestForAuthenticated` subclasses it, force-authenticates in autouse fixture. `TestForOwner` subclasses that, overrides status codes only (CRUD allowed). Extend with `TestForManager` / `TestForStaff`. [ADAPT auth mechanism + fixture names from project.]
 
-Class naming: permission `TestForAnonymous` / `TestForAuthenticated` / `TestForOwner` / `TestForManager` / `TestForStaff`; behaviour `TestJobCreate`; serializers `TestJobSerializer`.
+Naming: `TestJobCreate` behaviour, `TestJobSerializer` serializers.

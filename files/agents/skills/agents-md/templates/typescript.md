@@ -5,7 +5,7 @@ Append for any TypeScript project. Framework sections (`vue.md`) on top. Prune w
 ## General
 
 - TS mandatory, no plain JS. No `any` without justification comment; `unknown` + type guards for untrusted input.
-- `strict` in `tsconfig.json`; never relax flags to silence error — fix code.
+- `strict` in `tsconfig.json`; never relax flags — fix code.
 - `interface` for extensible object shapes, `type` for unions / mapped types.
 
 ## Style

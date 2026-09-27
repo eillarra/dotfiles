@@ -1,36 +1,35 @@
 # FastAPI sections
 
-Append these sections **on top of** `python.md` when the backend is FastAPI. Adapt the `<pkg>` placeholder to the actual import package name. Prune what doesn't apply.
+Append on top of `python.md` when backend is FastAPI. Adapt `<pkg>`; prune what doesn't apply.
 
 ## General
 
-- Routers handle HTTP only: validate input (Pydantic), call a service, return a response. No business logic in routers — push it into `services/`.
-- `services/` **must not** import from `routers/` / `api/` or the app entrypoint.
-- Reusable `Depends` callables (current user, rate-limiter, feature flags) live in `<pkg>/api/dependencies/` or `<pkg>/core/dependencies.py`. Keep them pure and injectable — no business logic in them.
+- Routers HTTP only: validate input (Pydantic), call service, return response. Business logic in `services/`.
+- `services/` **must not** import from `routers/` / `api/` or app entrypoint.
+- Reusable `Depends` callables (current user, rate-limiter, feature flags) in `<pkg>/api/dependencies/` or `<pkg>/core/dependencies.py`; pure, injectable, no business logic.
 
 ## ORM — Django
 
-This organisation's FastAPI projects use the **Django ORM** for models and migrations (not SQLAlchemy / SQLModel / Tortoise / asyncpg). Django is used purely as the ORM layer alongside FastAPI.
+Django ORM only (no SQLAlchemy / SQLModel / Tortoise / asyncpg); Django is persistence layer alongside FastAPI.
 
-- Models live in `<pkg>/models/` (Django models, grouped by domain). Business logic belongs in models or managers — "fat models, thin services/routers".
-- Migrations live in `<pkg>/migrations/`. Never edit a shipped migration; create a new one with `python manage.py makemigrations <app>`.
-- `DJANGO_SETTINGS_MODULE = "<pkg>.settings"` is set in `pyproject.toml`; Django is initialised before the FastAPI app starts (in `apps.py` / the entrypoint).
-- Tests use `pytest-django` with the Django DB fixture; never the production DB.
+- Models in `<pkg>/models/`, grouped by domain; business logic in models/managers.
+- Migrations in `<pkg>/migrations/`. Never edit shipped migration — new one via `python manage.py makemigrations <app>`.
+- `DJANGO_SETTINGS_MODULE = "<pkg>.settings"` in `pyproject.toml`; Django initialised before FastAPI app starts (`apps.py` / entrypoint).
+- Tests: `pytest-django` DB fixture; never production DB.
 
 ### Async routes and the (sync) Django ORM
 
-The Django ORM is synchronous. In FastAPI:
+Django ORM is synchronous:
 
-- **Sync route handlers** (`def`, not `async def`) run in a threadpool — safe to call the Django ORM directly.
-- **Async route handlers** (`async def`) run on the event loop — a sync ORM call blocks it. Either declare the handler as `def` for ORM-heavy endpoints, or wrap ORM calls with `sync_to_async` / `run_in_threadpool`.
+- `def` handlers run in threadpool — ORM calls safe.
+- `async def` handlers run on event loop — sync ORM call blocks it. Use `def` for ORM-heavy endpoints, or wrap with `sync_to_async` / `run_in_threadpool`.
 
-Do not write sync ORM queries directly inside `async def` handlers.
+Never write sync ORM queries directly inside `async def` handlers.
 
 ## Schemas
 
-- Pydantic models in `<pkg>/schemas/` (or colocated with routers for small projects).
-- Separate request / response schemas; do not reuse Django models directly as response models. Map via `model_config = ConfigDict(from_attributes=True)`.
-- Keep Pydantic schemas as the API contract and Django models as the persistence layer — they evolve independently.
+- Pydantic models in `<pkg>/schemas/` (or colocated with routers in small projects).
+- Separate request / response schemas; never Django models as response models — map via `model_config = ConfigDict(from_attributes=True)`. Schemas = API contract, models = persistence; evolve independently.
 
 ## Background tasks
 
@@ -38,20 +37,15 @@ Do not write sync ORM queries directly inside `async def` handlers.
 
 [ADAPT: arq is the default for async (used by soigneur). Replace with dramatiq / celery / rq / FastAPI `BackgroundTasks` as needed.]
 
-- Long-running or scheduled work goes in `<pkg>/tasks/`.
-- Schedule from services/routers via the task reference, not inline execution.
-- Redis-backed in production; configure via settings.
-- Tests must not execute real tasks — mock the enqueue call site.
+- Long-running / scheduled work in `<pkg>/tasks/`; enqueue via task reference from services/routers, never inline. Redis-backed in production.
+- Tests never execute real tasks — mock enqueue call site.
 
 ## Settings
 
-- `BaseSettings` subclass in `<pkg>/core/config.py` (or `<pkg>/settings.py`), env-driven, for FastAPI-side config.
-- Django settings live in the Django settings module (referenced by `DJANGO_SETTINGS_MODULE`).
-- Secrets from env vars (`.env` in dev, platform config in prod). Never hardcode.
+- FastAPI config: env-driven `BaseSettings` subclass in `<pkg>/core/config.py` (or `<pkg>/settings.py`). Django settings in `DJANGO_SETTINGS_MODULE`.
+- Secrets from env vars (`.env` dev, platform config prod); never hardcode.
 
 ## Entrypoint
 
-- App instance constructed in `<pkg>/app.py` or `<pkg>/main.py` (or `__main__.py`).
-- Lifespan / startup / shutdown handlers in `<pkg>/core/lifespan.py` or on the app factory.
-- Django is set up before the FastAPI app starts (Django apps registry + settings).
-- ASGI server: `uvicorn` (dev + prod) or `gunicorn -k uvicorn.workers.UvicornWorker` (prod).
+- App in `<pkg>/app.py` / `<pkg>/main.py` (or `__main__.py`); lifespan handlers in `<pkg>/core/lifespan.py` or app factory; Django set up before app starts.
+- ASGI: `uvicorn` (dev + prod) or `gunicorn -k uvicorn.workers.UvicornWorker` (prod).

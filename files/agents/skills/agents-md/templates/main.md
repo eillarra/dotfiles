@@ -4,9 +4,8 @@ Canonical source of truth for AI coding agents in this repo. [ALIASES: `CLAUDE.m
 
 ## Core philosophy
 
-- Challenge ambiguous, overly complex, or risky requests; suggest better alternative. Don't follow blindly.
-- Maintainability first; KISS & YAGNI — no unrequested functionality; consistency over novelty.
-- Self-documenting code, type hints everywhere, comments only for non-obvious _why_.
+- Challenge ambiguous, complex, or risky requests; suggest better alternative. Don't follow blindly.
+- Maintainability first; KISS & YAGNI; consistency over novelty; self-documenting code, type hints everywhere, comments only for non-obvious _why_.
 
 ## Stack
 
@@ -18,11 +17,11 @@ Canonical source of truth for AI coding agents in this repo. [ALIASES: `CLAUDE.m
 
 ## Commands
 
-All project commands via `./run` — loads `.env`, invokes underlying tool. Never call `uv` / `pytest` / `yarn` directly. [ADAPT: drop if no wrapper. No command lists or code blocks anywhere in `AGENTS.md` — agents read `run` / `pyproject.toml` / `package.json` / `Procfile`. Only a rule about a command (a pre-commit gate, a "never run X") earns a line.]
+All project commands via `./run` (loads `.env`, invokes underlying tool). Never call `uv` / `pytest` / `yarn` directly. [ADAPT: drop if no wrapper. No command lists or code blocks anywhere in `AGENTS.md` — agents read `run` / `pyproject.toml` / `package.json` / `Procfile`. Only a rule about a command (a pre-commit gate, a "never run X") earns a line.]
 
 ## Commit conventions
 
-Conventional Commits: `type(scope): description` — imperative, lowercase, no trailing period, one line. Types: `feat` / `fix` / `docs` / `refactor` / `test` / `chore` / `perf`. Breaking: `feat!:` / `BREAKING CHANGE:` footer. Never vague (`wip`, `update`).
+Conventional Commits: `type(scope): description` — imperative, lowercase, no trailing period, one line, no attribution trailers. Types: `feat` / `fix` / `docs` / `refactor` / `test` / `chore` / `perf`. Breaking: `feat!:` / `BREAKING CHANGE:` footer. Never vague (`wip`, `update`).
 
 ## Git workflow
 
