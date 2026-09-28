@@ -16,6 +16,8 @@ Baseline. Reads code, writes what it does as OpenSpec specs, reports what looks 
 
 Goal is two things at once: specs as source of truth going forward, and an honest snapshot of how complete the project is right now. Findings matter as much as specs.
 
+Normally run once per project, possibly in several passes. `baseline.md` is a snapshot of the code's current state, not a log: every pass rewrites it in place (step 5), and git history keeps earlier versions. It never grows by pass.
+
 Paths: `<root>` = directory printed by `openspec context`. Everything this skill writes lives under `<root>/openspec/`.
 
 Long shell output (inventories, greps, listings) may be truncated or compressed: redirect to `/tmp/baseline-<source>-<topic>.txt`, one file per topic (routes, models, client calls) so each stays readable, and Read it. Same if this skill's own text arrives with elided sections — Read `SKILL.md` from disk.
@@ -23,8 +25,9 @@ Long shell output (inventories, greps, listings) may be truncated or compressed:
 ## Modes
 
 - **Full** — no `<root>/openspec/specs/*/spec.md` yet (`.gitkeep` doesn't count). Steps 1–6.
-- **One capability** — `baseline <capability>`, or invoked before `openspec-propose` on an unspecced area. Step 1, steps 3–4 for that capability only (anchors from the stored map, else by grepping), step 5 appending a dated section, step 6.
+- **One capability** — `baseline <capability>`, or invoked before `openspec-propose` on an unspecced area. Step 1, steps 3–4 for that capability only (anchors from the stored map, else by grepping), step 5 updating `baseline.md` in place, step 6.
 - **Fill gaps** — some specs exist. Reuse the map stored in `baseline.md` (remap only if asked or none stored); steps 3–4 only for capabilities without a spec. Existing specs are source of truth: never rewrite them; code that contradicts one is a `drift` finding.
+- **Pass** — `baseline` again on an existing baseline ("new pass", "second sweep"). Step 1, step 4 on the stored map (fresh subagent, given the existing findings), then _Consolidate_, step 5, step 6. Specs stay as they are except as _Consolidate_ allows.
 - **triage / next / close** — work existing findings; see _Working the findings_, skip steps 1–6.
 - **auto** (argument) — no pause at the map checkpoint, no routing offer at the end.
 
@@ -134,7 +137,9 @@ Before logging a sweep candidate, trace it to the end: the signal, other write p
 
 ### Findings format
 
-Never fix code. Each finding: id (`B1`, `B2`, …), type, origin (`map` / `spec` / `sweep` — step where it was first spotted), capabilities (one or more; `cross-cutting` if repo-wide), claim in 1–3 sentences, evidence as one or more `repo:path:line` or `repo:path:start-end` (working-tree lines; suffix `(uncommitted)` when the file has uncommitted changes), and what would settle it.
+Never fix code. Each finding: id (`B1`, `B2`, …), type, capabilities (one or more; `cross-cutting` if repo-wide), claim in 1–3 sentences, evidence as one or more `repo:path:line` or `repo:path:start-end` (working-tree lines; suffix `(uncommitted)` when the file has uncommitted changes), and what would settle it.
+
+One finding per root cause or flow: several symptoms of one cause (three links to missing routes, four places that swallow errors) are one finding with a bullet per symptom, not one finding each.
 
 - `bug` — code contradicts evident intent (tests, naming, UI copy, sibling code).
 - `gap` — half-built: backend with no UI, UI with no backend, TODO/FIXME with substance, unhandled case users will hit.
@@ -144,14 +149,31 @@ Never fix code. Each finding: id (`B1`, `B2`, …), type, origin (`map` / `spec`
 
 Evidence or it isn't a finding. Style nits, refactor wishes, dependency age are not findings.
 
+## Consolidate
+
+Every pass after the first, and before hand-over on the first pass:
+
+- Re-check each finding's evidence against the current code. It holds → refresh the line numbers. Fixed → treat as `close` (below). Wrong → delete it and remove it from `Currently violated` lines.
+- Merge findings that share a root cause or flow into the lowest id. List merged ids under _Retired ids_ (`B14, B32 → B6`) and point `Currently violated` lines at the surviving id. Ids are never reused or renumbered, because specs and cards reference them.
+- New findings get the next free id and go into their priority group. There are never "pass N" sections.
+- A new or merged finding that breaks a spec requirement → add or extend that requirement's `Currently violated` line.
+- Specs may be tidied here without changing the behaviour they describe. A rule restated in several capabilities stays in its owner and becomes a reference elsewhere (see Spec rules). A SHALL that turns out to encode a finding's bug is corrected to the intended rule, or removed in favour of the `question`. Anything more goes through `openspec-propose`.
+
 ## Step 5 — report & config
 
-Write `<root>/openspec/baseline.md` (overwrite on full run; append a dated section otherwise):
+Write `<root>/openspec/baseline.md`, always the whole file, rewritten in place:
 
 ```markdown
 # Baseline — <YYYY-MM-DD>
 
 Sources: <repo>@<sha> (uncommitted: <n> paths, <folders>), …
+
+## Summary
+
+- <n> capabilities, <n> requirements: <completeness spread>.
+- <n> open findings: <counts by type>. <what changed since the last pass, if any>.
+- <where the problems are, in 2–3 bullets: which side, which kind>.
+- **Fix first:** <3–5 ids with one line each, in `baseline next` order>.
 
 ## Map
 
@@ -166,15 +188,20 @@ Sources: <repo>@<sha> (uncommitted: <n> paths, <folders>), …
 | standings     | 7    | complete     | api: tested · app: none | B9 (bug)           |
 | subscriptions | 4    | partial      | api: thin · app: none   | B3 (bug), B7 (gap) |
 
-## Findings
+## Findings — broken flows
 
 ### B1 · bug · standings, porras · open
 
-<claim>
-Origin: sweep
+<claim; several symptoms → one bullet each>
 Evidence: tropela-api:tropela/services/calculators/standings.py:88
 Settle: <what would confirm/refute>
+
+## Retired ids
+
+B14, B32 → B6 · …
 ```
+
+Findings are grouped under `## Findings — <group>` headings in this order, skipping empty groups: broken flows (bugs/drift in `broken` capabilities) → privacy and exposure → stale or lost data → other bugs and drift → half-built (`gap`) → questions → dead code. Within a group, most user impact first; ids don't have to be in order.
 
 Completeness (first match wins); minor bugs don't count, they show in the Findings column:
 
@@ -194,7 +221,7 @@ Root `config.yaml` has no real `context:` → add a `context: |` block right aft
 
 - `openspec validate --specs --strict` until no errors. INFO lines flagging a requirement body over 500 chars → split it; other INFO → ignore.
 - Never commit. Summarise in chat: capability count, requirement count, completeness spread, findings by type, top 3–5 findings worth acting on.
-- Not auto → offer a second sweep (see Gotchas). Commit only on user's go — store root: `docs: baseline specs` in the store repo.
+- Not auto → offer another pass (see Gotchas). Commit only on user's go — store root: `docs: baseline specs` in the store repo.
 - Don't route findings to Trello or `ideas.md` in bulk: `baseline.md` stays the one list, and findings leave it only when picked up (next section).
 
 ## Working the findings
@@ -217,6 +244,6 @@ No `open` left → `baseline.md` is a frozen snapshot; delete it or keep it, nev
 ## Gotchas
 
 - Specs describe the system once, not once per repo. A behaviour spread over backend + frontend is one requirement, not two.
-- One run finds roughly three quarters of what two runs find together. For a first baseline worth keeping, offer a second step 4 sweep: fresh subagent, same map, given the existing findings, told to add only new ones and to re-check existing evidence. Optional, only on user's go.
+- One run finds roughly three quarters of what two runs find together. For a first baseline worth keeping, offer another pass (mode **Pass**). Optional, only on user's go. Expect less from each pass; when one adds only a handful of findings, stop offering.
 - Evidence line numbers come from the source file itself (Read tool or `grep -n` on the file), never from a `/tmp` inventory dump — dumps with headers or concatenated files shift every line.
 - A test run is resettable (step 1 reset command); the specs from a kept run are not — once committed, later changes go through `openspec-propose`, not a rerun.
