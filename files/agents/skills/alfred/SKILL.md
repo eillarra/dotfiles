@@ -32,7 +32,7 @@ This week/Today = curation call, not due-date sort. No Urgent column; due badges
 Trello = someone waiting, a deadline, or real task pulled into the week. Ideas for a project with OpenSpec live in OpenSpec, not cards. Idea → draft → active model: global CLAUDE.md Specs — don't restate.
 
 - OpenSpec root: `openspec context --json` from `~/Code/<project>` (resolves `store: <id>` pointers). No `openspec/` → no root.
-- Store root: commit idea/draft edits in store repo (`docs: …`), never push. Repo-local root: gitignored, nothing to commit.
+- Store root: commit idea/draft edits in store repo (`docs: …`), never push. Repo-local root: `openspec/` is committed with the code repo — commit idea/draft edits there (`docs: …`), never push.
 
 ## Card conventions
 

@@ -36,7 +36,7 @@ Long shell output (inventories, greps, listings) may be truncated or compressed:
 - `openspec context` from the current repo gives `<root>`. `store: <id>` in `openspec/config.yaml` = shared store; add `--store <id>` to every `openspec` command.
 - Sources = every sibling repo pointing at the same root: `grep -l "store: <id>" <parent-of-current-repo>/*/openspec/config.yaml`. Repo-local root = current repo only.
 - Per source: `git rev-parse --short HEAD`, and `git status --porcelain -uall | wc -l` plus the folders touched, two levels below the repo root. Uncommitted work gets described like committed code, so it must show in the report.
-- Store root: `git -C <root> status --short -- openspec/` must be empty (ignore `.DS_Store`). Not empty → stop, ask. Reset after a run is always `git -C <root> checkout -- openspec/ && git -C <root> clean -fd openspec/`.
+- Any root: `git -C <root> status --short -- openspec/` must be empty (ignore `.DS_Store`). Not empty → stop, ask. Reset after a run is always `git -C <root> checkout -- openspec/ && git -C <root> clean -fd openspec/`.
 - Read the root's own `README.md` / `AGENTS.md`: its conventions (commit style, `ideas.md` format) override this skill's defaults; spec layout is decided in step 2 from code.
 - Read each source's `AGENTS.md` / `README.md`: stack, layout, domain words, declared external consumers.
 
@@ -221,12 +221,12 @@ Root `config.yaml` has no real `context:` → add a `context: |` block right aft
 
 - `openspec validate --specs --strict` until no errors. INFO lines flagging a requirement body over 500 chars → split it; other INFO → ignore.
 - Never commit. Summarise in chat: capability count, requirement count, completeness spread, findings by type, top 3–5 findings worth acting on.
-- Not auto → offer another pass (see Gotchas). Commit only on user's go — store root: `docs: baseline specs` in the store repo.
+- Not auto → offer another pass (see Gotchas). Commit only on user's go — `docs: baseline specs`, in the store repo or (repo-local root) the code repo.
 - Don't route findings to Trello or `ideas.md` in bulk: `baseline.md` stays the one list, and findings leave it only when picked up (next section).
 
 ## Working the findings
 
-Every finding heading ends with a status: `open` · `fixed <repo>@<sha>` · `dropped: <reason>` · `→ card` · `→ idea`. `baseline.md` stays the one list; a finding leaves `open` only through the commands below. Each command edits the store and commits (`docs: …`) — never code.
+Every finding heading ends with a status: `open` · `fixed <repo>@<sha>` · `dropped: <reason>` · `→ card` · `→ idea`. `baseline.md` stays the one list; a finding leaves `open` only through the commands below. Each command edits OpenSpec files at the root (store repo, or repo-local `openspec/` in the code repo) and commits (`docs: …`) — never code.
 
 - **`baseline triage`** — open `question`s, one at a time: claim + evidence, then user picks
     - intended → spec it (requirement or scenario), `dropped: intended`
