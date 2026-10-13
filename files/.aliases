@@ -45,7 +45,7 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 alias mp3='yt-dlp --extract-audio --audio-format mp3'
 
 drums() {
-    yt-dlp -o - --extract-audio --audio-format mp3 -- "$1" | ffmpeg -i pipe: -acodec pcm_s16le -ar 44100 -- "$1.wav"
+    yt-dlp -x --audio-format wav --ppa "ExtractAudio:-ar 44100" --no-playlist -- "$@"
 }
 
 mp3towav() {
