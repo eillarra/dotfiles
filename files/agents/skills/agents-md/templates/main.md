@@ -25,7 +25,12 @@ Conventional Commits: `type(scope): description` — imperative, lowercase, no t
 
 ## Git workflow
 
-Branch + PR for sensitive areas — auth, permissions, serializers / schemas, payments, security settings, CI workflows — or when in doubt; everything else may go straight to `main`. Never merge your own PR. [Self-contained on purpose: teammates / Copilot don't see the global tiered policy. ADAPT: name concrete paths only where this repo extends a category, e.g. "all of `config/settings/`, not only security settings".]
+[Self-contained on purpose: teammates / Copilot don't see the global policy. ADAPT: name concrete paths only where this repo extends a category, e.g. "all of `config/settings/`, not only security settings".]
+
+- Branch + PR for sensitive areas — auth / login / sessions, permissions / access control, serializers / API schemas, payments / billing, security settings / secrets handling, CI workflows (`.github/workflows/`) — or when in doubt. Decide before the first commit; a direct-to-`main` change that grows into a sensitive area moves to a branch before committing.
+- Everything else (copy, styling, docs, tests, isolated bug fixes, dependency bumps) may go straight to `main`.
+- Branch `type/short-description` from `main`; PR title in Conventional Commits form (becomes the squash commit). Never merge your own PR; leave it for review.
+- This decides _where_ commits go, not _whether_: commit / push / open PRs only when asked.
 
 ## Specs
 

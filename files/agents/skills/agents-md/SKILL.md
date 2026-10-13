@@ -54,7 +54,7 @@ A Sentry section is always added: backend endpoint + frontend endpoint when both
 - **Repo-specific truth → `AGENTS.md`:** stack list, non-negotiable rules ("never edit shipped migrations", async-route-blocking for FastAPI+Django ORM), command rules (`./run`, pre-commit gate) / test markers with usage rules / config locations, API contract, Sentry slugs — anything that changes when you switch repos. Guardrails stay here regardless of cross-repo constancy: they bind on every routine turn.
 - **Named, explicitly-invoked procedures → global skill:** release playbook, model+migration recipe, setup tutorial. Patterns that are merely cross-repo-constant are not skills — they're knowledge the model already has.
 - **Niche domain deep-dives → `docs/agent/<topic>.md`**, one-line pointer from `AGENTS.md`.
-- **Cross-repo agent workflow (OpenSpec usage, risk-tiered branch/PR policy) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer and a one-line, self-contained `## Git workflow` summary — sensitive-area categories + in-doubt→branch + direct-to-`main` otherwise — because teammates / Copilot don't see the global file. Name concrete paths only for repo-specific extensions the categories don't cover; never restate specs, OpenSpec workflow steps, or the full tiered policy.
+- **Cross-repo agent workflow (OpenSpec usage, risk-tiered branch/PR policy) → global `~/.claude/CLAUDE.md`** (`files/agents/AGENTS.md` in dotfiles). Repo `AGENTS.md` carries only the one-line `## Specs` pointer and a short, self-contained `## Git workflow` section (the `main.md` bullets: sensitive-area categories, in-doubt / grows-into → branch, direct-to-`main` otherwise, branch + PR-title naming, never self-merge, only-when-asked) — because teammates / Copilot don't see the global file. Name concrete paths only for repo-specific extensions the categories don't cover; never restate specs, OpenSpec workflow steps, or the full tiered policy.
 
 ### Inputs to gather before writing
 
@@ -67,7 +67,7 @@ Ask the user (or infer from the repo) before drafting:
 5. **Package managers** — Python: uv (preferred) / pip / poetry / hatch; Frontend: yarn (preferred) / npm / pnpm.
 6. **Sentry endpoints** — backend DSN or project slug; frontend DSN or project slug. For frontend-only repos, list the frontend project only. For backend-only repos, list the backend project only. For fullstack same-repo projects, list both.
 7. **Commit convention** — default Conventional Commits short form; confirm.
-8. **Git workflow summary** — default one-liner from `main.md` (sensitive-area categories: auth, permissions, serializers/schemas, payments, security settings, CI workflows → branch + PR; in doubt → branch; else direct to `main`). Name concrete paths only for repo-specific extensions the categories don't cover (e.g. a whole `settings/` dir, a bespoke billing module). Confirm with the user.
+8. **Git workflow summary** — default bullets from `main.md` (sensitive-area categories: auth / sessions, permissions, serializers / API schemas, payments / billing, security settings / secrets handling, CI workflows → branch + PR; in doubt or grows into a sensitive area → branch; else direct to `main`; branch / PR-title naming; never self-merge). Name concrete paths only for repo-specific extensions the categories don't cover (e.g. a whole `settings/` dir, a bespoke billing module). Confirm with the user.
 9. **Docstring style** — reST (Sphinx) / Google / NumPy / none; detect from existing code before keeping the reST section in `python.md` (frontend-only repos have no Python, so skip this question).
 10. **OpenSpec** — if no `openspec/` dir, suggest `openspec init --tools none` (skills are already global; `--tools agents` only if teammates need them in-repo). Run it only after the user confirms. If `openspec/config.yaml` has `store: <id>`, the repo uses a shared store — use the store variant of `## Specs`.
 
@@ -93,7 +93,7 @@ Classify anything found:
 
 Compose from the templates in `templates/`:
 
-1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow one-liner (categories + repo extensions), specs pointer, testing pointer, Sentry pointer, niche docs pointer).
+1. Always include `templates/main.md` (header, core philosophy, code style, stack, commands `./run` rule, commit conventions, git workflow bullets (categories + repo extensions), specs pointer, testing pointer, Sentry pointer, niche docs pointer).
 2. For any Python project type (`python-lib`, `django`, `fastapi`, `django+vue`, `mcp`): append `templates/python.md` (General/PEP 8, docstrings, Ruff pre-commit gate + `pyproject.toml` pointer, pytest test location/fixtures, **test-review workflow**).
 3. If the backend is Django: append `templates/django.md` (Fat-models-thin-views / ORM efficiency, migrations, API with DRF vs native-views+Pydantic variants, Django test patterns: file-suffix conventions, permission-inheritance pattern, test class naming).
 4. If the backend is FastAPI: append `templates/fastapi.md` (routers/dependencies, **Django ORM** (models, migrations, async-route-blocking rule), schemas, background tasks, settings, entrypoint).

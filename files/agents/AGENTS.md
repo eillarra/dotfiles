@@ -20,3 +20,7 @@ Risk-tiered; decide before the first commit of a task.
 - Everything else (small, non-security: copy, styling, docs, tests, isolated bug fixes, dependency bumps) → commit directly on `main`.
 - In doubt, or a direct-to-main change grows into a sensitive area → move it to a branch before committing.
 - This decides _where_ commits go, not _whether_: still commit / push / open PRs only when asked.
+
+## Before committing
+
+Any relevant commit (code, tests, migrations, config) needs an internal review first: run `clint` on the uncommitted diff, fix what holds up, then commit. Skip only for docs-only changes, OpenSpec bookkeeping, dependency bumps, or when the user says so.
