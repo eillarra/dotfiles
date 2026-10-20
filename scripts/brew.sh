@@ -54,6 +54,7 @@ formulas="
     ffmpeg
     gettext
     gpg
+    jq
     mysql@8.4
     node@24
     ollama

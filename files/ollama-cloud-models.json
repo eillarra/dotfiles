@@ -1,0 +1,8 @@
+{
+  "beam:cloud": "nebius/reflection/beam",
+  "clef:cloud": "cloudflare/clef",
+  "deepseek-v4.1-flash:cloud": "azure_ai/deepseek-v4.1-flash",
+  "glm-5.3:cloud": "zai/glm-5.3",
+  "glm-5.3-flash:cloud": "zai/glm-5.3-flash",
+  "mistral-large-4:cloud": "mistral/mistral-large-4"
+}

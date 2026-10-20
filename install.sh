@@ -16,6 +16,11 @@ source "$(dirname "${BASH_SOURCE[0]}")/scripts/macos.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/brew.sh"
 
 #
+# Pull ollama cloud models
+#
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/ollama.sh"
+
+#
 # Install CLI tools via uv
 #
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/tools.sh"

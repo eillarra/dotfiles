@@ -5,6 +5,7 @@
 # Skips Xcode tools and macOS configuration (see install.sh for those).
 #
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/brew.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/ollama.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/tools.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/dotfiles.sh"
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/agents.sh"

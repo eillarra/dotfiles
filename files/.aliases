@@ -58,6 +58,7 @@ mp3towav() {
 proxy_llms() {
     HEADROOM_BEACON=off \
     HEADROOM_EMBEDDER_RUNTIME="pytorch_mps" \
+    HEADROOM_MODEL_ALIAS_MAP="$(jq -e -c . "$HOME/.dotfiles/files/ollama-cloud-models.json" 2>/dev/null || true)" \
     OPENAI_API_KEY="sk-placeholder-key-for-ollama" \
     headroom proxy \
         --openai-api-url http://127.0.0.1:11434 \

@@ -110,4 +110,11 @@ if command_exists uv; then
   print_success "uv tools updated"
 fi
 
+#
+# Ollama cloud models
+#
+OLLAMA_CLEAN_MISSING=1
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/ollama.sh"
+unset OLLAMA_CLEAN_MISSING
+
 echo
